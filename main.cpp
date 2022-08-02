@@ -30,25 +30,6 @@ struct Circle
     unsigned char blue;
 };
 
-/*bool CheckCollisionBoundingBox(float FPosX, float FPosY, float SPosX, float SPosY, float Frad, float Srad)
-{
-    if (FPosX + Frad + Srad > SPosX && FPosX < SPosX + Frad + Srad)
-    {
-        if (FPosY + Frad + Srad > SPosY && FPosY < SPosY + Frad + Srad)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        };
-    }
-    else
-    {
-        return false;
-    };
-};*/
-
 bool CheckCollisionParticles(float FPosX, float FPosY, float SPosX, float SPosY, float Frad, float Srad)
 {
     if ((FPosX - SPosX) * (FPosX - SPosX) + (FPosY - SPosY) * (FPosY - SPosY) <= (Srad + Frad) * (Srad + Frad))
@@ -76,24 +57,11 @@ void UpdateParticles(Circle *circles, int NumOfCircles)
                     float DisX = circles[i].PosX - circles[j].PosX;
                     float DisY = circles[i].PosY - circles[j].PosY;
 
-                    /*float Viscosity = 0.0002f;
-
-                    if (Viscosity >= 1.0f)
-                    {
-                        Viscosity = 0.99999f;
-                    }*/
-                    
-
                     float length = sqrt((DisX * DisX) + (DisY * DisY));
                     float depth = length - (circles[i].radius + circles[j].radius + 1);
 
                     float UnitX = DisX / length;
                     float UnitY = DisY / length;
-
-                    //circles[i].VelX *= (1 - Viscosity);
-                    //circles[i].VelY *= (1 - Viscosity);
-                    //circles[j].VelX *= (1 - Viscosity);
-                    //circles[j].VelY *= (1 - Viscosity);
 
                     circles[i].VelX *= circles[i].elasticity * circles[j].elasticity;
                     circles[i].VelY *= circles[i].elasticity * circles[j].elasticity;
