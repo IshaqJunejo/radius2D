@@ -3,6 +3,7 @@
 #include <iostream>
 using namespace std;
 
+// Global Variables
 int CirsDown = 0;
 float WindowoffsetX = 25.0f;
 float WindowoffsetY = 225.0f;
@@ -30,6 +31,7 @@ struct Circle
     unsigned char blue;
 };
 
+// Function to Check if two Circles are colliding or not
 bool CheckCollisionParticles(float FPosX, float FPosY, float SPosX, float SPosY, float Frad, float Srad)
 {
     if ((FPosX - SPosX) * (FPosX - SPosX) + (FPosY - SPosY) * (FPosY - SPosY) <= (Srad + Frad) * (Srad + Frad))
@@ -42,6 +44,7 @@ bool CheckCollisionParticles(float FPosX, float FPosY, float SPosX, float SPosY,
     };
 };
 
+// Method for Updating Circles
 void UpdateParticles(Circle *circles, int NumOfCircles)
 {
     float gravity = 0.5f;
@@ -127,6 +130,7 @@ void UpdateParticles(Circle *circles, int NumOfCircles)
     };   
 };
 
+// Function for Drawing the Circles
 void DrawParticles(Circle *circles, int NumOfCircles)
 {
     for (int i = 0; i < NumOfCircles; i++)
@@ -139,10 +143,9 @@ int main()
 {    
     InitWindow(1050, 950, "Physics Simulation");
     
+    // Initializing Circles Randomly
     int NumOfCircles = 20;
-    
     Circle Particles[NumOfCircles];
-
     for (int i = 0; i < NumOfCircles; i++)
     {
         Particles[i].VelX = 0.0f;
@@ -162,11 +165,14 @@ int main()
         Particles[i].down = false;
     };
     
+    // Main Loop
     SetTargetFPS(60);
     while (!WindowShouldClose())
     {
+        // Draw
         UpdateParticles(Particles, NumOfCircles);
-
+        
+        // Drawing / Rendering
         BeginDrawing();
             ClearBackground((Color){25, 25, 25, 255});
 
