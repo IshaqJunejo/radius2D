@@ -31,18 +31,6 @@ namespace Radius2D
 
                 circles.Add(newCirc);
             }
-            /*foreach (Particle circ in circles)
-            {
-                circ.pos = new Vector2(Raylib.GetRandomValue(100, 900), Raylib.GetRandomValue(0, 800));
-                Console.WriteLine(circ.pos);
-
-                circ.vel = new Vector2(0, 0);
-                circ.force = new Vector2(0, 0);
-
-                circ.radius = 20;
-                circ.mass = (float) Math.Pow(circ.radius, 2) / 4;
-                circ.elasticity = 0.5f;
-            }*/
             Raylib.SetTargetFPS(120);
 
             while (!Raylib.WindowShouldClose())
