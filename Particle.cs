@@ -1,7 +1,7 @@
 using System.Numerics;
 using Raylib_cs;
 
-namespace radius2D
+namespace Radius2D
 {
     public class Particle
     {
