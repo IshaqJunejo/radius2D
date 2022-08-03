@@ -6,15 +6,23 @@ namespace Radius2D
     {
         static void Main()
         {
-            int num = 0;
+            const int Width = 1050;
+            const int Height = 950;
 
-            for (var i = 0; i <= 50; i++)
+            Raylib.InitWindow(Width, Height, "Physics Simulation");
+
+            Raylib.SetTargetFPS(120);
+
+            while (!Raylib.WindowShouldClose())
             {
-                num += i;
-                Console.WriteLine(i);
-            };
+                Raylib.BeginDrawing();
+                    Raylib.ClearBackground(Color.DARKGRAY);
 
-            Console.WriteLine(num);
+                    Raylib.DrawLine(0 + 50, 0, 0 + 50, Height - 50, Color.RAYWHITE);
+                    Raylib.DrawLine(Width - 50, 0, Width - 50, Height - 50, Color.RAYWHITE);
+                    Raylib.DrawLine(0 + 50, Height - 50, Width - 50, Height - 50, Color.RAYWHITE);
+                Raylib.EndDrawing();
+            }
         }
     }
 }
