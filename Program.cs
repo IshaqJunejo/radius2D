@@ -13,19 +13,19 @@ namespace Radius2D
 
             Raylib.InitWindow(Width, Height, "Physics Simulation");
 
-            int numOfCircles = 5;
+            int numOfCircles = 50;
             List<Particle> circles = new List<Particle>(numOfCircles);
 
             for (int i = 0; i < numOfCircles; i++)
             {
                 var newCirc = new Particle();
 
-                newCirc.pos = new Vector2(Raylib.GetRandomValue(100, 900), -60 * i);
+                newCirc.pos = new Vector2(Raylib.GetRandomValue(100, 900), -80 * i);
 
                 newCirc.vel = new Vector2(0, 0);
                 newCirc.force = new Vector2(0, 0);
 
-                newCirc.radius = 20;
+                newCirc.radius = 10;
                 newCirc.mass = (float) Math.Pow(newCirc.radius, 2) / 4;
                 newCirc.elasticity = 0.5f;
 
@@ -35,6 +35,11 @@ namespace Radius2D
 
             while (!Raylib.WindowShouldClose())
             {
+                foreach (Particle circ in circles)
+                {
+                    circ.Update();
+                }
+
                 Raylib.BeginDrawing();
                     Raylib.ClearBackground(Color.DARKGRAY);
 
