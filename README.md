@@ -7,4 +7,4 @@ Currently it doesn't have that much of functionalities, It only checks collision
 
 ## Compile
 
-To compile this, you need the .NET Framework and simply execute ``dotnet run`` in the ``radius2D`` directory.
+To compile this, you need the .NET Framework and simply execute ``dotnet run`` in the ``/radius2D`` directory.
