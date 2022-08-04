@@ -12,12 +12,7 @@ namespace Radius2D
         public float mass;
         public float elasticity;
 
-        public void Draw()
-        {
-            Raylib.DrawCircleV(pos, radius, Color.RAYWHITE);
-        }
-
-        public void Update()
+        public void Update(int W, int H, int offset)
         {
             float gravity = 0.5f;
             float terminalVel = 15.0f;
@@ -42,7 +37,28 @@ namespace Radius2D
                 vel.Y = -terminalVel;
             };
 
+            if (pos.Y >= H - offset - radius)
+            {
+                pos.Y = H - offset - radius;
+                vel.Y *= elasticity * -1;
+            };
+            if (pos.X < offset + radius)
+            {
+                pos.X = offset + radius;
+                vel.X *= -1;
+            }else if (pos.X >= W - offset - radius)
+            {
+                pos.X = W - offset - radius;
+                vel.X *= -1;
+            };
+
             pos += vel;
+            force = new Vector2(0, 0);
+        }
+        
+        public void Draw()
+        {
+            Raylib.DrawCircleV(pos, radius, Color.RAYWHITE);
         }
     }
 }
