@@ -11,30 +11,34 @@ namespace Radius2D
         public float radius;
         public float mass;
         public float elasticity;
-        public Color tint;
 
         public void Update(int W, int H, int offset, List<Circle> circles)
         {
             float gravity = 0.5f;
             float terminalVel = 10.0f;
-            
-            int change = 0;
+
             foreach (Circle circ in circles)
             {
                 if (circ != this)
                 {
                     if (Collision.CircleToCircle(this, circ) == true)
                     {
-                        change++;
+                        Vector2 distance = this.pos - circ.pos;
+                        float radiiSum = this.radius + circ.radius;
+                        float length = (float ) Math.Sqrt(distance.X * distance.X + distance.Y * distance.Y);
+                        float depth = length - (this.radius + circ.radius + 1);
+                        Vector2 unit = distance / length;
+
+                        this.pos.X = circ.pos.X + (radiiSum + 1) * unit.X;
+                        this.pos.Y = circ.pos.Y + (radiiSum + 1) * unit.Y;
+
+                        //this.vel *= this.elasticity * circ.elasticity;
+                        //circ.vel *= this.elasticity * circ.elasticity;
+
+                        this.force -= unit * depth / 2;
+                        circ.force += unit * depth / 2;
                     };
                 }
-            }
-            if (change >= 1)
-            {
-                this.tint = Color.BLUE;
-            }else
-            {
-                this.tint = Color.RAYWHITE;
             }
             this.force.Y += gravity * this.mass;
 
@@ -77,7 +81,7 @@ namespace Radius2D
         
         public void Draw()
         {
-            Raylib.DrawCircleV(this.pos, this.radius, this.tint);
+            Raylib.DrawCircleV(this.pos, this.radius, Color.RAYWHITE);
             Raylib.DrawCircleLines((int)this.pos.X, (int)this.pos.Y, this.radius, Color.BLACK);
         }
     }
