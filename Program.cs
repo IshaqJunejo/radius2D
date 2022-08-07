@@ -12,8 +12,22 @@ namespace Radius2D
 
             Raylib.InitWindow(Width, Height, "Physics Simulation");
 
+            List<Line> lines = new List<Line>(0);
+            var temp = new Line();
+            temp.p = new Vector2(50, 0);
+            temp.q = new Vector2(50, Height - 50);
+            lines.Add(temp);
+            var temp_ = new Line();
+            temp_.p = new Vector2(Width - 50, 0);
+            temp_.q = new Vector2(Width - 50, Height - 50);
+            lines.Add(temp_);
+            var temp_line = new Line();
+            temp_line.p = new Vector2(50, Height - 50);
+            temp_line.q = new Vector2(Width - 50, Height - 50);
+            lines.Add(temp_line);
+
             int numOfCircles = 200;
-            List<Circle> circles = new List<Circle>(numOfCircles);
+            List<Circle> circles = new List<Circle>(0);
 
             for (int i = 0; i < numOfCircles; i++)
             {
@@ -35,7 +49,7 @@ namespace Radius2D
             string fpsText;
             int offset = 50;
 
-            Raylib.SetTargetFPS(120);
+            Raylib.SetTargetFPS(480);
 
             while (!Raylib.WindowShouldClose())
             {
@@ -50,11 +64,14 @@ namespace Radius2D
                 Raylib.BeginDrawing();
                     Raylib.ClearBackground(Color.DARKGRAY);
 
-                    Raylib.DrawLine(0 + offset, 0, 0 + offset, Height - offset, Color.RAYWHITE);
-                    Raylib.DrawLine(Width - offset, 0, Width - offset, Height - offset, Color.RAYWHITE);
-                    Raylib.DrawLine(0 + offset, Height - offset, Width - offset, Height - offset, Color.RAYWHITE);
-
                     Raylib.DrawText(fpsText, 20, 20, 20, Color.RAYWHITE);
+                    //Raylib.DrawLine(0 + offset, 0, 0 + offset, Height - offset, Color.RAYWHITE);
+                    //Raylib.DrawLine(Width - offset, 0, Width - offset, Height - offset, Color.RAYWHITE);
+                    //Raylib.DrawLine(0 + offset, Height - offset, Width - offset, Height - offset, Color.RAYWHITE);
+                    foreach (Line l in lines)
+                    {
+                        l.DrawLine();
+                    }
 
                     foreach (Circle circ in circles)
                     {
