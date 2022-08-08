@@ -3,7 +3,7 @@ using Raylib_cs;
 
 namespace Radius2D
 {
-    class Line
+    public class Line
     {
         public Vector2 p;
         public Vector2 q;

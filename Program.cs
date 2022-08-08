@@ -22,11 +22,11 @@ namespace Radius2D
             temp_.q = new Vector2(Width - 50, Height - 50);
             lines.Add(temp_);
             var temp_line = new Line();
-            temp_line.p = new Vector2(50, Height - 50);
-            temp_line.q = new Vector2(Width - 50, Height - 50);
+            temp_line.p = new Vector2(50, Height - 30);
+            temp_line.q = new Vector2(Width - 50, Height - 30);
             lines.Add(temp_line);
 
-            int numOfCircles = 200;
+            int numOfCircles = 1;
             List<Circle> circles = new List<Circle>(0);
 
             for (int i = 0; i < numOfCircles; i++)
@@ -36,6 +36,7 @@ namespace Radius2D
                 newCirc.pos = new Vector2(Raylib.GetRandomValue(100, 900), -50 * i);
 
                 newCirc.vel = new Vector2(Raylib.GetRandomValue(-32, 32), Raylib.GetRandomValue(-32, 32));
+                //newCirc.vel = new Vector2(0, 0);
                 newCirc.force = new Vector2(0, 0);
 
                 newCirc.radius = 10;
@@ -58,7 +59,7 @@ namespace Radius2D
 
                 foreach (Circle circ in circles)
                 {
-                    circ.Update(Width, Height, offset, circles);
+                    circ.Update(Width, Height, offset, circles, lines);
                 };
 
                 Raylib.BeginDrawing();

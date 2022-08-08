@@ -11,8 +11,9 @@ namespace Radius2D
         public float radius;
         public float mass;
         public float elasticity;
+        private Color tint;
 
-        public void Update(int W, int H, int offset, List<Circle> circles)
+        public void Update(int W, int H, int offset, List<Circle> circles, List<Line> lines)
         {
             float gravity = 0.5f;
             float terminalVel = 10.0f;
@@ -25,7 +26,7 @@ namespace Radius2D
                     {
                         Vector2 distance = this.pos - circ.pos;
                         float radiiSum = this.radius + circ.radius;
-                        float length = (float ) Math.Sqrt(distance.X * distance.X + distance.Y * distance.Y);
+                        float length = (float) Math.Sqrt(distance.X * distance.X + distance.Y * distance.Y);
                         float depth = length - (this.radius + circ.radius + 1);
                         Vector2 unit = distance / length;
 
@@ -38,6 +39,14 @@ namespace Radius2D
                         this.force -= unit * depth / 2;
                         circ.force += unit * depth / 2;
                     };
+                }
+            }
+            tint = Color.RAYWHITE;
+            foreach (Line line in lines)
+            {
+                if (Collision.CircleToLine(line, this))
+                {
+                    tint = Color.BLUE;
                 }
             }
             this.force.Y += gravity * this.mass;
@@ -81,7 +90,7 @@ namespace Radius2D
         
         public void Draw()
         {
-            Raylib.DrawCircleV(this.pos, this.radius, Color.RAYWHITE);
+            Raylib.DrawCircleV(this.pos, this.radius, tint);
             Raylib.DrawCircleLines((int)this.pos.X, (int)this.pos.Y, this.radius, Color.BLACK);
         }
     }
