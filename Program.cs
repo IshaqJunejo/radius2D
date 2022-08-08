@@ -26,7 +26,7 @@ namespace Radius2D
             temp_line.q = new Vector2(Width - 50, Height - 30);
             lines.Add(temp_line);
 
-            int numOfCircles = 1;
+            int numOfCircles = 10;
             List<Circle> circles = new List<Circle>(0);
 
             for (int i = 0; i < numOfCircles; i++)
@@ -36,7 +36,6 @@ namespace Radius2D
                 newCirc.pos = new Vector2(Raylib.GetRandomValue(100, 900), -50 * i);
 
                 newCirc.vel = new Vector2(Raylib.GetRandomValue(-32, 32), Raylib.GetRandomValue(-32, 32));
-                //newCirc.vel = new Vector2(0, 0);
                 newCirc.force = new Vector2(0, 0);
 
                 newCirc.radius = 10;
