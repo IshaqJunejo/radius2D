@@ -31,18 +31,24 @@ namespace Radius2D
             }
         }
 
-        public static bool CircleToLine(Line l, Circle circ)
+        public static float CircleToLine(Line l, Circle circ, Vector2 position)
         {
-            Vector2 dist = l.p - l.q;
-            float Base = (float) Math.Sqrt(dist.X * dist.X + dist.Y * dist.Y);
-            float height = TriangleArea(l.p, l.q, circ.pos) * 2 / Base;
-
-            if (height <= circ.radius + 2)
+            if (Math.Atan2(l.p.Y - circ.pos.Y, l.p.X - circ.pos.X) >= -90 * 3.14 / 180 && Math.Atan2(l.p.Y - circ.pos.Y, l.p.X - circ.pos.X) <= 90 * 3.14 / 180)
             {
-                return true;
+                if (Math.Atan2(l.q.Y - circ.pos.Y, l.q.X - circ.pos.X) >= -90 * 3.14 / 180 && Math.Atan2(l.q.Y - circ.pos.Y, l.q.X - circ.pos.X) <= 90 * 3.14 / 180)
+                {
+                    Vector2 dist = l.p - l.q;
+                    float Base = (float) Math.Sqrt(dist.X * dist.X + dist.Y * dist.Y);
+                    float height = TriangleArea(l.p, l.q, position) * 2 / Base;
+
+                    return height;
+                }else
+                {
+                    return circ.radius * 2;
+                }
             }else
             {
-                return false;
+                return circ.radius * 2;
             }
         }
     }

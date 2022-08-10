@@ -15,8 +15,8 @@ namespace Radius2D
 
         public void Update(int W, int H, int offset, List<Circle> circles, List<Line> lines)
         {
-            float gravity = 0.5f;
-            float terminalVel = 10.0f;
+            float gravity = 0.01f;
+            float terminalVel = 2.0f;
 
             foreach (Circle circ in circles)
             {
@@ -44,9 +44,20 @@ namespace Radius2D
             tint = Color.RAYWHITE;
             foreach (Line line in lines)
             {
-                if (Collision.CircleToLine(line, this))
+                Vector2 temp_vector = new Vector2(this.pos.X + this.vel.X, this.pos.Y + this.vel.Y);
+                if (Collision.CircleToLine(line, this, temp_vector) <= this.radius)
                 {
                     tint = Color.BLUE;
+                    //float incidenceAngle = (float) Math.Atan2(this.vel.Y, this.vel.X) * 180 / 3.14f;
+                    float normalRayAngle = line.angle + 90.0f;
+                    //float deltaAngle = normalRayAngle - incidenceAngle;
+
+                    //float newAngle = normalRayAngle + deltaAngle * 2.0f;
+
+                    this.force.X += (float) Math.Cos(normalRayAngle * 3.14f / 180) * this.mass;
+                    this.force.Y += (float) Math.Sin(normalRayAngle * 3.14f / 180) * this.mass;
+                    this.pos.X -= (this.radius - Collision.CircleToLine(line, this, temp_vector)) * (float) Math.Cos(line.angle + 90 * 3.14f / 180);
+                    this.pos.Y -= (this.radius - Collision.CircleToLine(line, this, temp_vector)) * (float) Math.Sin(line.angle + 90 * 3.14f / 180);
                 }
             }
             this.force.Y += gravity * this.mass;
@@ -69,7 +80,7 @@ namespace Radius2D
                 this.vel.Y = -terminalVel;
             };
 
-            if (this.pos.Y >= H - offset - this.radius)
+            /*if (this.pos.Y >= H - offset - this.radius)
             {
                 this.pos.Y = H - offset - this.radius;
                 this.vel.Y *= this.elasticity * -1;
@@ -82,7 +93,7 @@ namespace Radius2D
             {
                 this.pos.X = W - offset - this.radius;
                 this.vel.X *= this.elasticity * -1;
-            };
+            };*/
 
             this.pos += this.vel * Raylib.GetFrameTime() * 120;
             this.force = new Vector2(0, 0);
