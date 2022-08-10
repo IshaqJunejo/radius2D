@@ -35,7 +35,7 @@ namespace Radius2D
                 l.UpdateValues();
             }
 
-            int numOfCircles = 50;
+            int numOfCircles = 500;
             List<Circle> circles = new List<Circle>(0);
 
             for (int i = 0; i < numOfCircles; i++)

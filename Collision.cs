@@ -1,3 +1,4 @@
+using System;
 using System.Numerics;
 
 namespace Radius2D
@@ -35,7 +36,7 @@ namespace Radius2D
         {
             if (Math.Atan2(l.p.Y - circ.pos.Y, l.p.X - circ.pos.X) >= -90 * 3.14 / 180 && Math.Atan2(l.p.Y - circ.pos.Y, l.p.X - circ.pos.X) <= 90 * 3.14 / 180)
             {
-                if (Math.Atan2(l.q.Y - circ.pos.Y, l.q.X - circ.pos.X) >= -90 * 3.14 / 180 && Math.Atan2(l.q.Y - circ.pos.Y, l.q.X - circ.pos.X) <= 90 * 3.14 / 180)
+                if (Math.Atan2(l.q.Y - circ.pos.Y, l.q.X - circ.pos.X) <= 270 * 3.14 / 180 && Math.Atan2(l.q.Y - circ.pos.Y, l.q.X - circ.pos.X) >= 90 * 3.14 / 180)
                 {
                     Vector2 dist = l.p - l.q;
                     float Base = (float) Math.Sqrt(dist.X * dist.X + dist.Y * dist.Y);

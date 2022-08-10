@@ -47,6 +47,7 @@ namespace Radius2D
                 Vector2 temp_vector = new Vector2(this.pos.X + this.vel.X, this.pos.Y + this.vel.Y);
                 if (Collision.CircleToLine(line, this, temp_vector) <= this.radius)
                 {
+                    Console.WriteLine(Collision.CircleToLine(line, this, temp_vector));
                     tint = Color.BLUE;
                     //float incidenceAngle = (float) Math.Atan2(this.vel.Y, this.vel.X) * 180 / 3.14f;
                     float normalRayAngle = line.angle + 90.0f;
@@ -103,6 +104,10 @@ namespace Radius2D
         {
             Raylib.DrawCircleV(this.pos, this.radius, tint);
             Raylib.DrawCircleLines((int)this.pos.X, (int)this.pos.Y, this.radius, Color.BLACK);
+            for (int i = 0; i < 270; i++)
+            {
+                Raylib.DrawLine((int)this.pos.X, (int)this.pos.Y, (int)(this.pos.X + Math.Cos(i * 3.14 / 180) * this.radius * 4), (int)(this.pos.Y + Math.Sin(i * 3.14 / 180) * this.radius * 4), Color.BLACK);
+            }
         }
     }
 }
