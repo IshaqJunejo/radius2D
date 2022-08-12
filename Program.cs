@@ -35,14 +35,14 @@ namespace Radius2D
                 l.UpdateValues();
             }
 
-            int numOfCircles = 500;
+            int numOfCircles = 2;
             List<Circle> circles = new List<Circle>(0);
 
             for (int i = 0; i < numOfCircles; i++)
             {
                 var newCirc = new Circle();
 
-                newCirc.pos = new Vector2(Raylib.GetRandomValue(100, 900), -50 * i);
+                newCirc.pos = new Vector2(Raylib.GetRandomValue(20, 900), -10 * i);
 
                 //newCirc.vel = new Vector2(Raylib.GetRandomValue(-32, 32), Raylib.GetRandomValue(-32, 32));
                 newCirc.vel = new Vector2(0, 0);
@@ -59,7 +59,7 @@ namespace Radius2D
             string fpsText;
             int offset = 50;
 
-            Raylib.SetTargetFPS(480);
+            Raylib.SetTargetFPS(15);
 
             while (!Raylib.WindowShouldClose())
             {

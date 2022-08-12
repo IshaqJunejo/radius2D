@@ -1,4 +1,3 @@
-using System;
 using System.Numerics;
 
 namespace Radius2D
@@ -34,7 +33,7 @@ namespace Radius2D
 
         public static float CircleToLine(Line l, Circle circ, Vector2 position)
         {
-            if (Math.Atan2(l.p.Y - circ.pos.Y, l.p.X - circ.pos.X) >= -90 * 3.14 / 180 && Math.Atan2(l.p.Y - circ.pos.Y, l.p.X - circ.pos.X) <= 90 * 3.14 / 180)
+            /*if (Math.Atan2(l.p.Y - circ.pos.Y, l.p.X - circ.pos.X) >= -90 * 3.14 / 180 && Math.Atan2(l.p.Y - circ.pos.Y, l.p.X - circ.pos.X) <= 90 * 3.14 / 180)
             {
                 if (Math.Atan2(l.q.Y - circ.pos.Y, l.q.X - circ.pos.X) <= 270 * 3.14 / 180 && Math.Atan2(l.q.Y - circ.pos.Y, l.q.X - circ.pos.X) >= 90 * 3.14 / 180)
                 {
@@ -43,6 +42,31 @@ namespace Radius2D
                     float height = TriangleArea(l.p, l.q, position) * 2 / Base;
 
                     return height;
+                }elses
+                {
+                    return circ.radius * 2;
+                }
+            }else
+            {
+                return circ.radius * 2;
+            }*/
+            double angFrom01 = Math.Atan2(l.p.Y - circ.pos.Y, l.p.X - circ.pos.X);
+            double angFrom02 = Math.Atan2(l.q.Y - circ.pos.Y, l.q.X - circ.pos.X);
+            double distance = Math.Sqrt((l.p.X - circ.pos.X) * (l.p.X - circ.pos.X) + (l.p.Y - circ.pos.Y) * (l.p.Y - circ.pos.Y));
+
+            float height = (float) (Math.Sin(angFrom01 - l.angle) * distance);
+            if (angFrom02 < 90 * Math.PI / 180 && angFrom02 >= -90 * Math.PI / 180)
+            {
+                Console.Write(l.angle + " - " + angFrom01 + " X " + 180 + " -:- " + Math.PI + " = ");
+                Console.WriteLine(l.angle - angFrom01 * 180 / Math.PI);
+                //Console.WriteLine(90 * Math.PI / 180);
+                if (l.angle - angFrom01 <= 90 * Math.PI / 180 && l.angle - angFrom01 > 90 * Math.PI / 180)
+                {
+                    Console.WriteLine(height);
+                    return Math.Abs(height);
+                }else if (l.angle - angFrom01 >= 100 * Math.PI / 180)
+                {
+                    return (float) distance;
                 }else
                 {
                     return circ.radius * 2;
