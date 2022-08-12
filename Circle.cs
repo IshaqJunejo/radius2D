@@ -11,11 +11,9 @@ namespace Radius2D
         public float radius;
         public float mass;
         public float elasticity;
-        private Color tint;
 
-        public void Update(int W, int H, int offset, List<Circle> circles, List<Line> lines)
+        public void Update(int W, int H, List<Circle> circles)
         {
-            float gravity = 0.01f;
             float terminalVel = 2.0f;
 
             foreach (Circle circ in circles)
@@ -33,51 +31,11 @@ namespace Radius2D
                         this.pos.X = circ.pos.X + (radiiSum + 1) * unit.X;
                         this.pos.Y = circ.pos.Y + (radiiSum + 1) * unit.Y;
 
-                        //this.vel *= this.elasticity * circ.elasticity;
-                        //circ.vel *= this.elasticity * circ.elasticity;
-
                         this.force -= unit * depth / 2;
                         circ.force += unit * depth / 2;
                     };
                 }
             }
-            tint = Color.RAYWHITE;
-            /*foreach (Line line in lines)
-            {
-                Vector2 temp_vector = new Vector2(this.pos.X + this.vel.X, this.pos.Y + this.vel.Y);
-                if (Collision.CircleToLine(line, this, temp_vector) <= this.radius)
-                {
-                    //Console.WriteLine(Collision.CircleToLine(line, this, temp_vector));
-                    tint = Color.BLUE;
-                    //float incidenceAngle = (float) Math.Atan2(this.vel.Y, this.vel.X) * 180 / 3.14f;
-                    float normalRayAngle = line.angle + 90.0f;
-                    //float deltaAngle = normalRayAngle - incidenceAngle;
-
-                    //float newAngle = normalRayAngle + deltaAngle * 2.0f;
-
-                    //this.force.X += (float) Math.Cos(normalRayAngle * 3.14f / 180) * this.mass;
-                    //this.force.Y += (float) Math.Sin(normalRayAngle * 3.14f / 180) * this.mass;
-                    this.pos.X -= (this.radius - Collision.CircleToLine(line, this, temp_vector)) * (float) Math.Cos(line.angle + 90 * 3.14f / 180);
-                    this.pos.Y -= (this.radius - Collision.CircleToLine(line, this, temp_vector)) * (float) Math.Sin(line.angle + 90 * 3.14f / 180);
-                }
-            }*/
-            Vector2 temp_vector = new Vector2(this.pos.X + this.vel.X, this.pos.Y + this.vel.Y);
-            if (Collision.CircleToLine(lines[3], this, temp_vector) <= this.radius)
-            {
-                //Console.WriteLine(Collision.CircleToLine(line, this, temp_vector));
-                tint = Color.BLUE;
-                //float incidenceAngle = (float) Math.Atan2(this.vel.Y, this.vel.X) * 180 / 3.14f;
-                float normalRayAngle = lines[3].angle + 90.0f;
-                //float deltaAngle = normalRayAngle - incidenceAngle;
-
-                //float newAngle = normalRayAngle + deltaAngle * 2.0f;
-
-                //this.force.X += (float) Math.Cos(normalRayAngle * 3.14f / 180) * this.mass;
-                //this.force.Y += (float) Math.Sin(normalRayAngle * 3.14f / 180) * this.mass;
-                //this.pos.X -= (this.radius - Collision.CircleToLine(lines[3], this, temp_vector)) * (float) Math.Cos(lines[3].angle + 90 * 3.14f / 180);
-                //this.pos.Y -= (this.radius - Collision.CircleToLine(lines[3], this, temp_vector)) * (float) Math.Sin(lines[3].angle + 90 * 3.14f / 180);
-            }
-            this.force.Y += gravity * this.mass;
 
             this.vel += this.force / this.mass * Raylib.GetFrameTime() * 120;
 
@@ -97,20 +55,25 @@ namespace Radius2D
                 this.vel.Y = -terminalVel;
             };
 
-            /*if (this.pos.Y >= H - offset - this.radius)
+            if (this.pos.X <= this.radius)
             {
-                this.pos.Y = H - offset - this.radius;
-                this.vel.Y *= this.elasticity * -1;
+                this.pos.X = this.radius;
+                this.vel.X *= -1;
+            }else if (this.pos.X >= W - this.radius)
+            {
+                this.pos.X = W - this.radius;
+                this.vel.X *= -1;
             };
-            if (this.pos.X < offset + this.radius)
+
+            if (this.pos.Y <= this.radius)
             {
-                this.pos.X = offset + this.radius;
-                this.vel.X *= this.elasticity * -1;
-            }else if (this.pos.X >= W - offset - this.radius)
+                this.pos.Y = this.radius;
+                this.vel.Y *= -1;
+            }else if (this.pos.Y >= H - this.radius)
             {
-                this.pos.X = W - offset - this.radius;
-                this.vel.X *= this.elasticity * -1;
-            };*/
+                this.pos.Y = H - this.radius;
+                this.vel.Y *= -1;
+            };
 
             this.pos += this.vel * Raylib.GetFrameTime() * 120;
             this.force = new Vector2(0, 0);
@@ -118,12 +81,8 @@ namespace Radius2D
         
         public void Draw()
         {
-            Raylib.DrawCircleV(this.pos, this.radius, tint);
+            Raylib.DrawCircleV(this.pos, this.radius, Color.RAYWHITE);
             Raylib.DrawCircleLines((int)this.pos.X, (int)this.pos.Y, this.radius, Color.BLACK);
-            /*for (int i = 0; i < 270; i+=5)
-            {
-                Raylib.DrawLine((int)this.pos.X, (int)this.pos.Y, (int)(this.pos.X + Math.Cos(i * 3.14 / 180) * this.radius * 10), (int)(this.pos.Y + Math.Sin(i * 3.14 / 180) * this.radius * 10), Color.BLACK);
-            }*/
         }
     }
 }

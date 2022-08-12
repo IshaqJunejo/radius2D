@@ -12,44 +12,20 @@ namespace Radius2D
 
             Raylib.InitWindow(Width, Height, "Physics Simulation");
 
-            List<Line> lines = new List<Line>(0);
-            var temp = new Line();
-            temp.p = new Vector2(50, 0);
-            temp.q = new Vector2(50, Height - 50);
-            lines.Add(temp);
-            var temp_ = new Line();
-            temp_.p = new Vector2(Width - 50, 0);
-            temp_.q = new Vector2(Width - 50, Height - 50);
-            lines.Add(temp_);
-            var temp_line = new Line();
-            temp_line.p = new Vector2(50, Height - 30);
-            temp_line.q = new Vector2(Width - 50, Height - 30);
-            lines.Add(temp_line);
-            var temp_line2 = new Line();
-            temp_line2.p = new Vector2(250, 250);
-            temp_line2.q = new Vector2(500, 300);
-            lines.Add(temp_line2);
-
-            foreach (Line l in lines)
-            {
-                l.UpdateValues();
-            }
-
-            int numOfCircles = 2;
+            int numOfCircles = 15;
             List<Circle> circles = new List<Circle>(0);
 
             for (int i = 0; i < numOfCircles; i++)
             {
                 var newCirc = new Circle();
 
-                newCirc.pos = new Vector2(Raylib.GetRandomValue(20, 900), -10 * i);
+                newCirc.pos = new Vector2(Raylib.GetRandomValue(20, 900), Raylib.GetRandomValue(20, 900));
 
-                //newCirc.vel = new Vector2(Raylib.GetRandomValue(-32, 32), Raylib.GetRandomValue(-32, 32));
-                newCirc.vel = new Vector2(0, 0);
+                newCirc.vel = new Vector2(Raylib.GetRandomValue(-32, 32) / 4, Raylib.GetRandomValue(-32, 32) / 4);
                 newCirc.force = new Vector2(0, 0);
 
-                newCirc.radius = 10;
-                newCirc.mass = (float) Math.Pow(newCirc.radius, 2) / 4;
+                newCirc.radius = Raylib.GetRandomValue(12, 30);
+                newCirc.mass = (float) Math.Pow(newCirc.radius, 3) / 4;
                 newCirc.elasticity = 0.4f;
 
                 circles.Add(newCirc);
@@ -57,9 +33,8 @@ namespace Radius2D
 
             float FPS;
             string fpsText;
-            int offset = 50;
 
-            Raylib.SetTargetFPS(15);
+            Raylib.SetTargetFPS(120);
 
             while (!Raylib.WindowShouldClose())
             {
@@ -68,20 +43,13 @@ namespace Radius2D
 
                 foreach (Circle circ in circles)
                 {
-                    circ.Update(Width, Height, offset, circles, lines);
-                };
+                    circ.Update(Width, Height, circles);
+                }
 
                 Raylib.BeginDrawing();
                     Raylib.ClearBackground(Color.DARKGRAY);
 
                     Raylib.DrawText(fpsText, 20, 20, 20, Color.RAYWHITE);
-                    //Raylib.DrawLine(0 + offset, 0, 0 + offset, Height - offset, Color.RAYWHITE);
-                    //Raylib.DrawLine(Width - offset, 0, Width - offset, Height - offset, Color.RAYWHITE);
-                    //Raylib.DrawLine(0 + offset, Height - offset, Width - offset, Height - offset, Color.RAYWHITE);
-                    foreach (Line l in lines)
-                    {
-                        l.DrawLine();
-                    }
 
                     foreach (Circle circ in circles)
                     {
