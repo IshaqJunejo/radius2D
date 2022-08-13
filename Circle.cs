@@ -12,30 +12,9 @@ namespace Radius2D
         public float mass;
         public float elasticity;
 
-        public void Update(int W, int H, List<Circle> circles)
+        public void Update(int W, int H)
         {
-            float terminalVel = 2.0f;
-
-            foreach (Circle circ in circles)
-            {
-                if (circ != this)
-                {
-                    if (Collision.CircleToCircle(this, circ) == true)
-                    {
-                        Vector2 distance = this.pos - circ.pos;
-                        float radiiSum = this.radius + circ.radius;
-                        float length = (float) Math.Sqrt(distance.X * distance.X + distance.Y * distance.Y);
-                        float depth = length - (this.radius + circ.radius + 1);
-                        Vector2 unit = distance / length;
-
-                        this.pos.X = circ.pos.X + (radiiSum + 1) * unit.X;
-                        this.pos.Y = circ.pos.Y + (radiiSum + 1) * unit.Y;
-
-                        this.force -= unit * depth / 2;
-                        circ.force += unit * depth / 2;
-                    };
-                }
-            }
+            float terminalVel = 100.0f;
 
             this.vel += this.force / this.mass * Raylib.GetFrameTime() * 120;
 
@@ -77,6 +56,20 @@ namespace Radius2D
 
             this.pos += this.vel * Raylib.GetFrameTime() * 120;
             this.force = new Vector2(0, 0);
+        }
+
+        public void CollisionResponse(List<Circle> circles)
+        {
+            foreach (Circle circ in circles)
+            {
+                if (circ != this)
+                {
+                    if (Collision.CircleToCircle(this, circ))
+                    {
+                        // Collision Response Over Here
+                    };
+                }
+            }
         }
         
         public void Draw()

@@ -21,12 +21,12 @@ namespace Radius2D
 
                 newCirc.pos = new Vector2(Raylib.GetRandomValue(20, 900), Raylib.GetRandomValue(20, 900));
 
-                newCirc.vel = new Vector2(Raylib.GetRandomValue(-32, 32) / 4, Raylib.GetRandomValue(-32, 32) / 4);
+                newCirc.vel = new Vector2(0, Raylib.GetRandomValue(-8, 8) / 4);
                 newCirc.force = new Vector2(0, 0);
 
-                newCirc.radius = Raylib.GetRandomValue(12, 30);
+                newCirc.radius = 20;
                 newCirc.mass = (float) Math.Pow(newCirc.radius, 3) / 4;
-                newCirc.elasticity = 0.4f;
+                newCirc.elasticity = 1.0f;
 
                 circles.Add(newCirc);
             }
@@ -43,7 +43,11 @@ namespace Radius2D
 
                 foreach (Circle circ in circles)
                 {
-                    circ.Update(Width, Height, circles);
+                    circ.Update(Width, Height);
+                }
+                foreach (Circle circ in circles)
+                {
+                    circ.CollisionResponse(circles);
                 }
 
                 Raylib.BeginDrawing();
