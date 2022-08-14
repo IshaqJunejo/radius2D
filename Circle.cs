@@ -16,7 +16,7 @@ namespace Radius2D
         public void Update(int W, int H)
         {
             float terminalVel = 100.0f;
-            this.force.Y += 0.02f * this.mass;
+            //this.force.Y += 0.02f * this.mass;
 
             this.vel += this.force / this.mass * Raylib.GetFrameTime() * 120;
 
@@ -46,11 +46,11 @@ namespace Radius2D
                 this.vel.X *= -1;
             };
 
-            /*if (this.pos.Y <= this.radius)
+            if (this.pos.Y <= this.radius)
             {
                 this.pos.Y = this.radius;
                 this.vel.Y *= -1;
-            }else*/if (this.pos.Y >= H - this.radius)
+            }else if (this.pos.Y >= H - this.radius)
             {
                 this.pos.Y = H - this.radius;
                 this.vel.Y *= -0.3f;
@@ -63,23 +63,29 @@ namespace Radius2D
 
         public void CollisionResponse(Circle circ)
         {
-            if (circ != this)
+            if (circ.pos != this.pos)
             {
                 if (Collision.CircleToCircle(this, circ))
                 {
-                    tint = Color.BLANK;
-                    Vector2 distance = circ.pos - this.pos;
+                    // Penetration Over Here
+                    Vector2 distance = this.pos - circ.pos;
                     float length = (float) Math.Sqrt(distance.X * distance.X + distance.Y * distance.Y);
                     Vector2 normal = distance / length;
-                        
+
+                    float depth = (this.radius + circ.radius) - length;
+                    Vector2 pentrateResolve = normal * depth / 2;
+
+                    this.pos += pentrateResolve;
+                    circ.pos -= pentrateResolve;
+
+                    // Collision Response Over Here
                     Vector2 relativeVelocity = this.vel - circ.vel;
                     float seperatingVelocity = Vector2.Dot(normal, relativeVelocity) * -1;
 
                     Vector2 seperatingVelocityVector = seperatingVelocity * normal;
 
                     this.vel += seperatingVelocityVector;
-                    circ.vel += seperatingVelocityVector * -1;
-                    // Collision Response Over Here
+                    circ.vel -= seperatingVelocityVector;
                 };
             }
         }

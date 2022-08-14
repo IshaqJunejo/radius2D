@@ -12,16 +12,16 @@ namespace Radius2D
 
             Raylib.InitWindow(Width, Height, "Physics Simulation");
 
-            int numOfCircles = 20;
+            int numOfCircles = 30;
             List<Circle> circles = new List<Circle>(0);
 
             for (int i = 0; i < numOfCircles; i++)
             {
                 var newCirc = new Circle();
 
-                newCirc.pos = new Vector2(Raylib.GetRandomValue(20, 900), -60 * i);
+                newCirc.pos = new Vector2(Raylib.GetRandomValue(20, 900), Raylib.GetRandomValue(20, 900));
 
-                newCirc.vel = new Vector2(Raylib.GetRandomValue(-8, 8) / 4, Raylib.GetRandomValue(-8, 8) / 4);
+                newCirc.vel = new Vector2(Raylib.GetRandomValue(-8, 8), Raylib.GetRandomValue(-8, 8));
                 newCirc.force = new Vector2(0, 0);
 
                 newCirc.radius = Raylib.GetRandomValue(8, 25);
