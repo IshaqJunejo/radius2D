@@ -11,10 +11,12 @@ namespace Radius2D
         public float radius;
         public float mass;
         public float elasticity;
+        private Color tint;
 
         public void Update(int W, int H)
         {
             float terminalVel = 100.0f;
+            this.force.Y += 0.02f * this.mass;
 
             this.vel += this.force / this.mass * Raylib.GetFrameTime() * 120;
 
@@ -44,38 +46,48 @@ namespace Radius2D
                 this.vel.X *= -1;
             };
 
-            if (this.pos.Y <= this.radius)
+            /*if (this.pos.Y <= this.radius)
             {
                 this.pos.Y = this.radius;
                 this.vel.Y *= -1;
-            }else if (this.pos.Y >= H - this.radius)
+            }else*/if (this.pos.Y >= H - this.radius)
             {
                 this.pos.Y = H - this.radius;
-                this.vel.Y *= -1;
+                this.vel.Y *= -0.3f;
             };
 
             this.pos += this.vel * Raylib.GetFrameTime() * 120;
             this.force = new Vector2(0, 0);
+            tint = Color.RAYWHITE;
         }
 
-        public void CollisionResponse(List<Circle> circles)
+        public void CollisionResponse(Circle circ)
         {
-            foreach (Circle circ in circles)
+            if (circ != this)
             {
-                if (circ != this)
+                if (Collision.CircleToCircle(this, circ))
                 {
-                    if (Collision.CircleToCircle(this, circ))
-                    {
-                        // Collision Response Over Here
-                    };
-                }
+                    tint = Color.BLANK;
+                    Vector2 distance = circ.pos - this.pos;
+                    float length = (float) Math.Sqrt(distance.X * distance.X + distance.Y * distance.Y);
+                    Vector2 normal = distance / length;
+                        
+                    Vector2 relativeVelocity = this.vel - circ.vel;
+                    float seperatingVelocity = Vector2.Dot(normal, relativeVelocity) * -1;
+
+                    Vector2 seperatingVelocityVector = seperatingVelocity * normal;
+
+                    this.vel += seperatingVelocityVector;
+                    circ.vel += seperatingVelocityVector * -1;
+                    // Collision Response Over Here
+                };
             }
         }
         
         public void Draw()
         {
-            Raylib.DrawCircleV(this.pos, this.radius, Color.RAYWHITE);
-            Raylib.DrawCircleLines((int)this.pos.X, (int)this.pos.Y, this.radius, Color.BLACK);
+            Raylib.DrawCircleV(this.pos, this.radius, tint);
+            Raylib.DrawCircleLines((int)this.pos.X, (int)this.pos.Y, this.radius, Color.WHITE);
         }
     }
 }

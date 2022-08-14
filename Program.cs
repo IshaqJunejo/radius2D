@@ -12,19 +12,19 @@ namespace Radius2D
 
             Raylib.InitWindow(Width, Height, "Physics Simulation");
 
-            int numOfCircles = 15;
+            int numOfCircles = 20;
             List<Circle> circles = new List<Circle>(0);
 
             for (int i = 0; i < numOfCircles; i++)
             {
                 var newCirc = new Circle();
 
-                newCirc.pos = new Vector2(Raylib.GetRandomValue(20, 900), Raylib.GetRandomValue(20, 900));
+                newCirc.pos = new Vector2(Raylib.GetRandomValue(20, 900), -60 * i);
 
-                newCirc.vel = new Vector2(0, Raylib.GetRandomValue(-8, 8) / 4);
+                newCirc.vel = new Vector2(Raylib.GetRandomValue(-8, 8) / 4, Raylib.GetRandomValue(-8, 8) / 4);
                 newCirc.force = new Vector2(0, 0);
 
-                newCirc.radius = 20;
+                newCirc.radius = 25;
                 newCirc.mass = (float) Math.Pow(newCirc.radius, 3) / 4;
                 newCirc.elasticity = 1.0f;
 
@@ -41,13 +41,13 @@ namespace Radius2D
                 FPS = Raylib.GetFPS();
                 fpsText = Convert.ToString(FPS);
 
-                foreach (Circle circ in circles)
+                foreach (Circle circle in circles)
                 {
-                    circ.Update(Width, Height);
-                }
-                foreach (Circle circ in circles)
-                {
-                    circ.CollisionResponse(circles);
+                    circle.Update(Width, Height);
+                    foreach (Circle circ in circles)
+                    {
+                        circle.CollisionResponse(circ);;
+                    }
                 }
 
                 Raylib.BeginDrawing();
