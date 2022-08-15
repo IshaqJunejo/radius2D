@@ -2,8 +2,10 @@ using System.Numerics;
 
 namespace Radius2D
 {
+    // Class for Methods of checking Collision between different objects
     public class Collision
     {
+        // Method for Calculating Area of Triangle, it is used in collision between line and circle
         private static float TriangleArea(Vector2 a, Vector2 b, Vector2 c)
         {
             Vector2 AB = new Vector2(b.X - a.X, b.Y - a.Y);
@@ -20,6 +22,7 @@ namespace Radius2D
             };
         }
 
+        // Method to Calculate collision between Two Balls/Circles
         public static bool CircleToCircle(Circle circ1, Circle circ2)
         {
             if (Math.Sqrt((circ1.pos.X - circ2.pos.X) * (circ1.pos.X - circ2.pos.X) + (circ1.pos.Y - circ2.pos.Y) * (circ1.pos.Y - circ2.pos.Y)) <= circ1.radius + circ2.radius)
@@ -31,6 +34,7 @@ namespace Radius2D
             }
         }
 
+        // Method to calculate Collision between Ball/Circle and Line
         public static float CircleToLine(Line l, Circle circ, Vector2 position)
         {
             /*if (Math.Atan2(l.p.Y - circ.pos.Y, l.p.X - circ.pos.X) >= -90 * 3.14 / 180 && Math.Atan2(l.p.Y - circ.pos.Y, l.p.X - circ.pos.X) <= 90 * 3.14 / 180)
