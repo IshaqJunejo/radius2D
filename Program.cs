@@ -15,8 +15,16 @@ namespace Radius2D
             const int Height = 950;
             Raylib.InitWindow(Width, Height, "Physics Simulation");
 
+            // Initializing the List of Lines
+            List<Line> lines = new List<Line>(0);
+            var temp = new Line();
+            temp.p = new Vector2(Width, 600);
+            temp.q = new Vector2(0, 600);
+            temp.UpdateValues();
+            lines.Add(temp);
+
             // Initializing the List of Balls/Circles
-            int numOfCircles = 50;
+            int numOfCircles = 5;
             List<Circle> circles = new List<Circle>(0);
             for (int i = 0; i < numOfCircles; i++)
             {
@@ -29,7 +37,7 @@ namespace Radius2D
 
                 newCirc.radius = Raylib.GetRandomValue(10, 30);
                 newCirc.mass = (float) Math.Pow(newCirc.radius, 3) / 4;
-                newCirc.elasticity = 1.0f;
+                newCirc.elasticity = 0.3f;
 
                 circles.Add(newCirc);
             }
@@ -55,7 +63,11 @@ namespace Radius2D
                     // Looking for and Resolving the Collision between the Balls/Circles
                     foreach (Circle circ in circles)
                     {
-                        circle.CollisionResponse(circ);
+                        circle.CollisionResponseCircle(circ);
+                    }
+                    foreach (Line l in lines)
+                    {
+                        circle.CollisionResponseLine(l);
                     }
                 };
 
@@ -71,6 +83,10 @@ namespace Radius2D
                     foreach (Circle circ in circles)
                     {
                         circ.Draw();
+                    }
+                    foreach (Line l in lines)
+                    {
+                        l.DrawLine();
                     }
                 
                 // End of Rendering section

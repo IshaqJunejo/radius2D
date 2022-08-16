@@ -37,16 +37,16 @@ namespace Radius2D
         // Method to calculate Collision between Ball/Circle and Line
         public static float CircleToLine(Line l, Circle circ, Vector2 position)
         {
-            /*if (Math.Atan2(l.p.Y - circ.pos.Y, l.p.X - circ.pos.X) >= -90 * 3.14 / 180 && Math.Atan2(l.p.Y - circ.pos.Y, l.p.X - circ.pos.X) <= 90 * 3.14 / 180)
+            /*if (Math.Atan2(l.p.Y - circ.pos.Y, l.p.X - circ.pos.X) >= -90 * Math.PI / 180 && Math.Atan2(l.p.Y - circ.pos.Y, l.p.X - circ.pos.X) <= 90 * Math.PI / 180)
             {
-                if (Math.Atan2(l.q.Y - circ.pos.Y, l.q.X - circ.pos.X) <= 270 * 3.14 / 180 && Math.Atan2(l.q.Y - circ.pos.Y, l.q.X - circ.pos.X) >= 90 * 3.14 / 180)
+                if (Math.Atan2(l.q.Y - circ.pos.Y, l.q.X - circ.pos.X) <= 270 * Math.PI / 180 && Math.Atan2(l.q.Y - circ.pos.Y, l.q.X - circ.pos.X) >= 90 * Math.PI / 180)
                 {
                     Vector2 dist = l.p - l.q;
                     float Base = (float) Math.Sqrt(dist.X * dist.X + dist.Y * dist.Y);
                     float height = TriangleArea(l.p, l.q, position) * 2 / Base;
 
                     return height;
-                }elses
+                }else
                 {
                     return circ.radius * 2;
                 }
@@ -54,7 +54,11 @@ namespace Radius2D
             {
                 return circ.radius * 2;
             }*/
-            double angFrom01 = Math.Atan2(l.p.Y - circ.pos.Y, l.p.X - circ.pos.X);
+            Vector2 dist = l.p - l.q;
+            float Base = (float) Math.Sqrt(dist.X * dist.X + dist.Y * dist.Y);
+            float height = TriangleArea(l.p, l.q, position) * 2 / Base;
+            return height;
+            /*double angFrom01 = Math.Atan2(l.p.Y - circ.pos.Y, l.p.X - circ.pos.X);
             double angFrom02 = Math.Atan2(l.q.Y - circ.pos.Y, l.q.X - circ.pos.X);
             double distance = Math.Sqrt((l.p.X - circ.pos.X) * (l.p.X - circ.pos.X) + (l.p.Y - circ.pos.Y) * (l.p.Y - circ.pos.Y));
 
@@ -78,7 +82,7 @@ namespace Radius2D
             }else
             {
                 return circ.radius * 2;
-            }
+            }*/
         }
     }
 }

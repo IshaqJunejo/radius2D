@@ -16,7 +16,7 @@ namespace Radius2D
         public void UpdateValues()
         {
             this.length = (float) Math.Sqrt((p.X - q.X) * (p.X - q.X) + (p.Y - q.Y) * (p.Y - q.Y));
-            this.angle = (float) Math.Atan2(p.Y - q.Y, p.X - q.X) * 180.0f / 3.14f;
+            this.angle = (float) Math.Atan2(p.Y - q.Y, p.X - q.X);
         }
 
         // Method to Draw the Line

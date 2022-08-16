@@ -21,7 +21,7 @@ namespace Radius2D
             float terminalVel = 100.0f;
 
             // Gravity
-            this.force.Y += 0.02f * this.mass;
+            this.force.Y += 0.2f * this.mass;
 
             // Updating the Velocity using the Force
             this.vel += this.force / this.mass * Raylib.GetFrameTime() * 120;
@@ -48,22 +48,22 @@ namespace Radius2D
             if (this.pos.X <=  0 + this.radius)
             {
                 this.pos.X = this.radius;
-                this.vel.X *= -1;
+                this.vel.X *= this.elasticity * -1;
             }else if (this.pos.X >= W - this.radius)
             {
                 this.pos.X = W - this.radius;
-                this.vel.X *= -1;
+                this.vel.X *= this.elasticity * -1;
             };
 
             // Looking if the Balls/Circles are out of the Screen's Y axis
             if (this.pos.Y <= 0 + this.radius)
             {
-                this.pos.Y = this.radius;
-                this.vel.Y *= -1;
+                this.pos.Y = this.radius + 1;
+                this.vel.Y *= this.elasticity * -1;
             }else if (this.pos.Y >= H - this.radius)
             {
                 this.pos.Y = H - this.radius;
-                this.vel.Y *= -0.3f;
+                this.vel.Y *= this.elasticity * -1;
             };
 
             // Updating the Ball's/Circle's Position using the Velocity
@@ -74,7 +74,7 @@ namespace Radius2D
         }
 
         // Method for responding to the Collisions
-        public void CollisionResponse(Circle circ)
+        public void CollisionResponseCircle(Circle circ)
         {
             // Checking if both the Balls/Circles are not the same
             if (circ.pos != this.pos)
@@ -94,14 +94,45 @@ namespace Radius2D
                     circ.pos -= pentrateResolve;
 
                     // Repulsion
+                    float productOfElasticity = this.elasticity * circ.elasticity;
+                    float ratioOfMass = this.mass / circ.mass;
                     Vector2 relativeVelocity = this.vel - circ.vel;
                     float seperatingVelocity = Vector2.Dot(normal, relativeVelocity) * -1;
 
                     Vector2 seperatingVelocityVector = seperatingVelocity * normal;
 
-                    this.vel += seperatingVelocityVector;
-                    circ.vel -= seperatingVelocityVector;
+                    this.vel += seperatingVelocityVector * productOfElasticity;
+                    circ.vel -= seperatingVelocityVector * productOfElasticity;
                 };
+            }
+        }
+        public void CollisionResponseLine(Line l)
+        {
+            if (Collision.CircleToLine(l, this, this.pos) < this.radius)
+            {
+                double ang01 = Math.Atan2(l.p.Y - this.pos.Y, l.p.X - this.pos.X);
+
+                float depth = this.radius - Collision.CircleToLine(l, this, this.pos);
+
+                if (ang01 - l.angle > 0)
+                {
+                    this.pos.X += depth * (float) Math.Cos(l.angle - (90 * Math.PI / 180));
+                    this.pos.Y += depth * (float) Math.Sin(l.angle - (90 * Math.PI / 180));
+                    
+                    this.vel.X += depth * (float) Math.Cos(l.angle - (90 * Math.PI / 180));
+                    this.vel.Y += depth * (float) Math.Sin(l.angle - (90 * Math.PI / 180));
+                }else if (ang01 - l.angle < 0)
+                {
+
+                    this.pos.X += depth * (float) Math.Cos(l.angle + (90 * Math.PI / 180));
+                    this.pos.Y += depth * (float) Math.Sin(l.angle + (90 * Math.PI / 180));
+
+                    this.vel.X += depth * (float) Math.Cos(l.angle + (90 * Math.PI / 180));
+                    this.vel.Y += depth * (float) Math.Sin(l.angle + (90 * Math.PI / 180));
+                }else
+                {
+                    Console.Write("...");
+                }
             }
         }
         
