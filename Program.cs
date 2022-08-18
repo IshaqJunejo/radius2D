@@ -17,20 +17,36 @@ namespace Radius2D
 
             // Initializing the List of Lines
             List<Line> lines = new List<Line>(0);
-            var temp = new Line();
-            temp.p = new Vector2(Width, 600);
-            temp.q = new Vector2(0, 600);
-            temp.UpdateValues();
-            lines.Add(temp);
+            var line01 = new Line();
+            line01.p = new Vector2(100, 200);
+            line01.q = new Vector2(Width - 150, 400);
+            lines.Add(line01);
+            var line02 = new Line();
+            line02.p = new Vector2(0, 0);
+            line02.q = new Vector2(0, Height);
+            lines.Add(line02);
+            var line03 = new Line();
+            line03.p = new Vector2(Width, 0);
+            line03.q = new Vector2(Width, Height);
+            lines.Add(line03);
+            var line04 = new Line();
+            line04.p = new Vector2(0, Height);
+            line04.q = new Vector2(Width, Height);
+            lines.Add(line04);
+
+            foreach (Line line in lines)
+            {
+                line.UpdateValues();
+            }
 
             // Initializing the List of Balls/Circles
-            int numOfCircles = 5;
+            int numOfCircles = 1;
             List<Circle> circles = new List<Circle>(0);
             for (int i = 0; i < numOfCircles; i++)
             {
                 var newCirc = new Circle();
 
-                newCirc.pos = new Vector2(Raylib.GetRandomValue(20, 900), Raylib.GetRandomValue(20, 900));
+                newCirc.pos = new Vector2(Raylib.GetRandomValue(0, 1000), Raylib.GetRandomValue(20, 90));
 
                 newCirc.vel = new Vector2(Raylib.GetRandomValue(-8, 8), Raylib.GetRandomValue(-8, 8));
                 newCirc.force = new Vector2(0, 0);
@@ -47,7 +63,7 @@ namespace Radius2D
             string fpsText;
 
             // Setting FrameRate and Starting the Main Loop
-            Raylib.SetTargetFPS(120);
+            Raylib.SetTargetFPS(60);
             while (!Raylib.WindowShouldClose())
             {
                 // Updating the Extra Variables
