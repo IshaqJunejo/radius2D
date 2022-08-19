@@ -12,19 +12,20 @@ namespace Radius2D
         public Vector2 force;
         public float radius;
         public float mass;
+        public float inverseMass;
         public float elasticity;
 
         // Update Method for Balls/Circles
         public void Update(int W, int H)
         {
             // Initializing Terminal(Maximum) Velocity
-            float terminalVel = 100.0f;
+            float terminalVel = 7.5f;
 
             // Gravity
-            this.force.Y += 0.2f * this.mass;
+            this.force.Y += 0.1f * this.mass;
 
             // Updating the Velocity using the Force
-            this.vel += this.force / this.mass * Raylib.GetFrameTime() * 120;
+            this.vel += this.force / this.mass * Raylib.GetFrameTime() * 60;
 
             // Checking if Horizontal Velocity is in the Terminal Velocity
             if (this.vel.X >= terminalVel)
@@ -45,7 +46,7 @@ namespace Radius2D
             };
 
             // Updating the Ball's/Circle's Position using the Velocity
-            this.pos += this.vel * Raylib.GetFrameTime() * 120;
+            this.pos += this.vel * Raylib.GetFrameTime() * 60;
 
             // Renewing the Force Vector
             this.force = new Vector2(0, 0);
@@ -76,13 +77,17 @@ namespace Radius2D
                     float productOfElasticity = this.elasticity * circ.elasticity;
                     float ratioOfMass = this.mass / circ.mass;
                     Vector2 relativeVelocity = this.vel - circ.vel;
-                    float seperatingVelocity = Vector2.Dot(normal, relativeVelocity) * -1;
+                    float seperatingVelocity = Vector2.Dot(normal, relativeVelocity);
+                    float newSeperatingVelocity = seperatingVelocity * -1 * productOfElasticity;
 
-                    Vector2 seperatingVelocityVector = seperatingVelocity * normal;
+                    //Vector2 seperatingVelocityVector = newSeperatingVelocity * normal;
+                    float seperatingVelocityDifference = newSeperatingVelocity - seperatingVelocity;
+                    float impulse = seperatingVelocityDifference / (this.inverseMass + circ.inverseMass);
+                    Vector2 impulseVector = impulse * normal;
 
                     // Executing Repulsion
-                    this.vel += seperatingVelocityVector * productOfElasticity;
-                    circ.vel -= seperatingVelocityVector * productOfElasticity;
+                    this.vel += impulseVector * this.inverseMass;
+                    circ.vel -= impulseVector * circ.inverseMass;
                 };
             }
         }

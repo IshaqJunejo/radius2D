@@ -18,8 +18,8 @@ namespace Radius2D
             // Initializing the List of Lines
             List<Line> lines = new List<Line>(0);
             var line01 = new Line();
-            line01.p = new Vector2(100, 200);
-            line01.q = new Vector2(Width - 150, 400);
+            line01.p = new Vector2(100, 600);
+            line01.q = new Vector2(Width - 150, 800);
             lines.Add(line01);
             var line02 = new Line();
             line02.p = new Vector2(0, 0);
@@ -40,20 +40,27 @@ namespace Radius2D
             }
 
             // Initializing the List of Balls/Circles
-            int numOfCircles = 1;
+            int numOfCircles = 50;
             List<Circle> circles = new List<Circle>(0);
             for (int i = 0; i < numOfCircles; i++)
             {
                 var newCirc = new Circle();
 
-                newCirc.pos = new Vector2(Raylib.GetRandomValue(0, 1000), Raylib.GetRandomValue(20, 90));
+                newCirc.pos = new Vector2(Raylib.GetRandomValue(0, 1000), -25 * i);
 
-                newCirc.vel = new Vector2(Raylib.GetRandomValue(-8, 8), Raylib.GetRandomValue(-8, 8));
+                newCirc.vel = new Vector2(0, 0);
                 newCirc.force = new Vector2(0, 0);
 
-                newCirc.radius = Raylib.GetRandomValue(10, 30);
+                newCirc.radius = Raylib.GetRandomValue(8, 25);
                 newCirc.mass = (float) Math.Pow(newCirc.radius, 3) / 4;
-                newCirc.elasticity = 0.3f;
+                if (newCirc.mass == 0)
+                {
+                    newCirc.inverseMass = 0;
+                }else
+                {
+                    newCirc.inverseMass = 1 / newCirc.mass;
+                };
+                newCirc.elasticity = 1.0f;
 
                 circles.Add(newCirc);
             }
@@ -100,6 +107,7 @@ namespace Radius2D
                     {
                         circ.Draw();
                     }
+                    // Drawing every Line
                     foreach (Line l in lines)
                     {
                         l.DrawLine();
