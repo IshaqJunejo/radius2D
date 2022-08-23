@@ -15,8 +15,27 @@ namespace Radius2D
         public float inverseMass;
         public float elasticity;
 
+        public Circle(float posX, float posY, float velX, float velY, float radius, float elasticity)
+        {
+            this.pos = new Vector2(posX, posY);
+            this.vel = new Vector2(velX, velY);
+
+            this.force = new Vector2(0, 0);
+
+            this.radius = radius;
+            this.mass = (float) Math.Pow(this.radius, 2) / 2.0f;
+            if (this.mass == 0)
+            {
+                this.inverseMass = 0;
+            }else
+            {
+                this.inverseMass = 1 / this.mass;
+            };
+            this.elasticity = elasticity;
+        }
+
         // Update Method for Balls/Circles
-        public void Update(int W, int H)
+        public void Update(int W, int H, float deltaTime)
         {
             // Initializing Terminal(Maximum) Velocity
             float terminalVel = 7.5f;
@@ -25,7 +44,7 @@ namespace Radius2D
             this.force.Y += 0.1f * this.mass;
 
             // Updating the Velocity using the Force
-            this.vel += this.force / this.mass * Raylib.GetFrameTime() * 60;
+            this.vel += this.force / this.mass * deltaTime * 60;
 
             // Checking if Horizontal Velocity is in the Terminal Velocity
             if (this.vel.X >= terminalVel)
@@ -46,14 +65,14 @@ namespace Radius2D
             };
 
             // Updating the Ball's/Circle's Position using the Velocity
-            this.pos += this.vel * Raylib.GetFrameTime() * 60;
+            this.pos += this.vel * deltaTime * 60;
 
             // Renewing the Force Vector
             this.force = new Vector2(0, 0);
         }
 
         // Method for responding to the Collisions
-        public void CollisionResponseCircle(Circle circ)
+        public void CollisionResponseCircle(Circle circ, float deltaTime)
         {
             // Checking if both the Balls/Circles are not the same
             if (circ.pos != this.pos)
@@ -86,14 +105,14 @@ namespace Radius2D
                     Vector2 impulseVector = impulse * normal;
 
                     // Executing Repulsion
-                    this.vel += impulseVector * this.inverseMass;
-                    circ.vel -= impulseVector * circ.inverseMass;
+                    this.vel += impulseVector * this.inverseMass * deltaTime * 60;
+                    circ.vel -= impulseVector * circ.inverseMass * deltaTime * 60;
                 };
             }
         }
 
         // Method for Responding to the Collision between Circle and Line
-        public void CollisionResponseLine(Line l)
+        public void CollisionResponseLine(Line l, float deltaTime)
         {
             // Checking for Collision activity
             if (Collision.CircleToLine(l, this) < this.radius)
@@ -108,16 +127,16 @@ namespace Radius2D
                     this.pos.X += depth * (float) Math.Cos(l.angle - (90 * Math.PI / 180));
                     this.pos.Y += depth * (float) Math.Sin(l.angle - (90 * Math.PI / 180));
                     
-                    this.vel.X += depth * (float) Math.Cos(l.angle - (90 * Math.PI / 180));
-                    this.vel.Y += depth * (float) Math.Sin(l.angle - (90 * Math.PI / 180));
+                    this.vel.X += depth * (float) Math.Cos(l.angle - (90 * Math.PI / 180)) * this.elasticity * deltaTime * 60;
+                    this.vel.Y += depth * (float) Math.Sin(l.angle - (90 * Math.PI / 180)) * this.elasticity * deltaTime * 60;
                 }else if (ang01 - l.angle < 0)
                 {
 
                     this.pos.X += depth * (float) Math.Cos(l.angle + (90 * Math.PI / 180));
                     this.pos.Y += depth * (float) Math.Sin(l.angle + (90 * Math.PI / 180));
 
-                    this.vel.X += depth * (float) Math.Cos(l.angle + (90 * Math.PI / 180));
-                    this.vel.Y += depth * (float) Math.Sin(l.angle + (90 * Math.PI / 180));
+                    this.vel.X += depth * (float) Math.Cos(l.angle + (90 * Math.PI / 180)) * this.elasticity * deltaTime * 60;
+                    this.vel.Y += depth * (float) Math.Sin(l.angle + (90 * Math.PI / 180)) * this.elasticity * deltaTime * 60;
                 }else
                 {
                     Console.Write("...");
@@ -128,8 +147,8 @@ namespace Radius2D
         // Method to draw the Balls/Circles
         public void Draw()
         {
-            Raylib.DrawCircleV(this.pos, this.radius, Color.WHITE);
-            Raylib.DrawCircleLines((int)this.pos.X, (int)this.pos.Y, this.radius, Color.WHITE);
+            Raylib.DrawCircleV(this.pos, this.radius - 1, Color.WHITE);
+            Raylib.DrawCircleLines((int)this.pos.X, (int)this.pos.Y, this.radius - 1, Color.WHITE);
         }
     }
 }

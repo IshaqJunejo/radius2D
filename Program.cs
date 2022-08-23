@@ -17,81 +17,54 @@ namespace Radius2D
 
             // Initializing the List of Lines
             List<Line> lines = new List<Line>(0);
-            var line01 = new Line();
-            line01.p = new Vector2(100, 600);
-            line01.q = new Vector2(Width - 150, 800);
+            var line01 = new Line(1, 600, Width - 150, Height - 1);
             lines.Add(line01);
-            var line02 = new Line();
-            line02.p = new Vector2(0, 0);
-            line02.q = new Vector2(0, Height);
+            var line02 = new Line(0, 0, 0, Height);
             lines.Add(line02);
-            var line03 = new Line();
-            line03.p = new Vector2(Width, 0);
-            line03.q = new Vector2(Width, Height);
+            var line03 = new Line(Width, 0, Width, Height);
             lines.Add(line03);
-            var line04 = new Line();
-            line04.p = new Vector2(0, Height);
-            line04.q = new Vector2(Width, Height);
+            var line04 = new Line(0, Height, Width, Height);
             lines.Add(line04);
 
-            foreach (Line line in lines)
-            {
-                line.UpdateValues();
-            }
-
             // Initializing the List of Balls/Circles
-            int numOfCircles = 50;
+            int numOfCircles = 100;
             List<Circle> circles = new List<Circle>(0);
             for (int i = 0; i < numOfCircles; i++)
             {
-                var newCirc = new Circle();
-
-                newCirc.pos = new Vector2(Raylib.GetRandomValue(0, 1000), -25 * i);
-
-                newCirc.vel = new Vector2(0, 0);
-                newCirc.force = new Vector2(0, 0);
-
-                newCirc.radius = Raylib.GetRandomValue(8, 25);
-                newCirc.mass = (float) Math.Pow(newCirc.radius, 3) / 4;
-                if (newCirc.mass == 0)
-                {
-                    newCirc.inverseMass = 0;
-                }else
-                {
-                    newCirc.inverseMass = 1 / newCirc.mass;
-                };
-                newCirc.elasticity = 1.0f;
+                var newCirc = new Circle(Raylib.GetRandomValue(0, 1000), -30 * i, 0, 0, 15, 0.8f);
 
                 circles.Add(newCirc);
             }
 
             // Some Extra Variables
             float FPS;
+            float deltaTime;
             string fpsText;
 
             // Setting FrameRate and Starting the Main Loop
-            Raylib.SetTargetFPS(60);
+            Raylib.SetTargetFPS(120);
             while (!Raylib.WindowShouldClose())
             {
                 // Updating the Extra Variables
                 FPS = Raylib.GetFPS();
                 fpsText = Convert.ToString(FPS);
+                deltaTime = Raylib.GetFrameTime();
 
                 // Iterating through the List of Balls/Circles
                 foreach (Circle circle in circles)
                 {
                     // Updating the Positions of Balls/Circles
-                    circle.Update(Width, Height);
-
+                    circle.Update(Width, Height, deltaTime);
                     // Looking for and Resolving the Collision between the Balls/Circles
                     foreach (Circle circ in circles)
                     {
-                        circle.CollisionResponseCircle(circ);
+                        circle.CollisionResponseCircle(circ, deltaTime);
                     }
                     foreach (Line l in lines)
                     {
-                        circle.CollisionResponseLine(l);
+                        circle.CollisionResponseLine(l, deltaTime);
                     }
+                    
                 };
 
                 // Rendering Section of the Program

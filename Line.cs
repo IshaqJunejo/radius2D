@@ -3,7 +3,7 @@ using Raylib_cs;
 
 namespace Radius2D
 {
-    // Class for Lines (Currently not in Use)
+    // Class for Lines
     public class Line
     {
         // Public Variables
@@ -13,10 +13,13 @@ namespace Radius2D
         public float angle;
 
         // Method to update Values of the Line, it will be used right after initializing (or Updating) the Line
-        public void UpdateValues()
+        public Line(float posX1, float posY1, float posX2, float posY2)
         {
-            this.length = (float) Math.Sqrt((p.X - q.X) * (p.X - q.X) + (p.Y - q.Y) * (p.Y - q.Y));
-            this.angle = (float) Math.Atan2(p.Y - q.Y, p.X - q.X);
+            this.p = new Vector2(posX1, posY1);
+            this.q = new Vector2(posX2, posY2);
+
+            this.length = (float) Math.Sqrt((this.p.X - this.q.X) * (this.p.X - this.q.X) + (this.p.Y - this.q.Y) * (this.p.Y - this.q.Y));
+            this.angle = (float) Math.Atan2(this.p.Y - this.q.Y, this.p.X - this.q.X);
         }
 
         // Method to Draw the Line
