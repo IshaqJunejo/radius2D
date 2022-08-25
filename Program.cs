@@ -17,7 +17,7 @@ namespace Radius2D
 
             // Initializing the List of Lines
             List<Line> lines = new List<Line>(0);
-            var line01 = new Line(1, 600, Width - 150, Height - 1);
+            var line01 = new Line(-50, 600, Width - 150, Height - 1);
             lines.Add(line01);
             var line02 = new Line(0, 0, 0, Height);
             lines.Add(line02);
@@ -27,11 +27,11 @@ namespace Radius2D
             lines.Add(line04);
 
             // Initializing the List of Balls/Circles
-            int numOfCircles = 100;
+            int numOfCircles = 150;
             List<Circle> circles = new List<Circle>(0);
             for (int i = 0; i < numOfCircles; i++)
             {
-                var newCirc = new Circle(Raylib.GetRandomValue(0, 1000), -30 * i, 0, 0, 15, 0.8f);
+                var newCirc = new Circle(Raylib.GetRandomValue(0, Width), -30 * i, 0, 0, 20, 0.8f);
 
                 circles.Add(newCirc);
             }
@@ -40,9 +40,10 @@ namespace Radius2D
             float FPS;
             float deltaTime;
             string fpsText;
+            int subSteps = 4;
 
             // Setting FrameRate and Starting the Main Loop
-            Raylib.SetTargetFPS(120);
+            //Raylib.SetTargetFPS(120);
             while (!Raylib.WindowShouldClose())
             {
                 // Updating the Extra Variables
@@ -50,23 +51,25 @@ namespace Radius2D
                 fpsText = Convert.ToString(FPS);
                 deltaTime = Raylib.GetFrameTime();
 
-                // Iterating through the List of Balls/Circles
-                foreach (Circle circle in circles)
+                for (int i = 0; i < subSteps; i++)
                 {
-                    // Updating the Positions of Balls/Circles
-                    circle.Update(Width, Height, deltaTime);
-                    // Looking for and Resolving the Collision between the Balls/Circles
-                    foreach (Circle circ in circles)
+                    // Iterating through the List of Balls/Circles
+                    foreach (Circle circle in circles)
                     {
-                        circle.CollisionResponseCircle(circ, deltaTime);
-                    }
-                    foreach (Line l in lines)
-                    {
-                        circle.CollisionResponseLine(l, deltaTime);
-                    }
-                    
-                };
-
+                        // Updating the Positions of Balls/Circles
+                        circle.Update(Width, Height, deltaTime / subSteps);
+                        // Looking for and Resolving the Collision between the Balls/Circles
+                        foreach (Circle circ in circles)
+                        {
+                            circle.CollisionResponseCircle(circ, deltaTime / subSteps);
+                        }
+                        foreach (Line l in lines)
+                        {
+                            circle.CollisionResponseLine(l, deltaTime / subSteps);
+                        }
+                    };
+                }
+                
                 // Rendering Section of the Program
                 Raylib.BeginDrawing();
                     // Drawing Background
