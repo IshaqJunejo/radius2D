@@ -14,8 +14,9 @@ namespace Radius2D
         public float mass;
         public float inverseMass;
         public float elasticity;
+        public Color shade;
 
-        public Circle(float posX, float posY, float velX, float velY, float radius, float elasticity)
+        public Circle(float posX, float posY, float velX, float velY, float radius, float mass, float elasticity, Color tint)
         {
             this.pos = new Vector2(posX, posY);
             this.vel = new Vector2(velX, velY);
@@ -23,7 +24,8 @@ namespace Radius2D
             this.force = new Vector2(0, 0);
 
             this.radius = radius;
-            this.mass = (float) Math.Pow(this.radius, 2) / 2.0f;
+            //this.mass = (float) Math.Pow(this.radius, 2) / 2.0f;
+            this.mass = mass;
             if (this.mass == 0)
             {
                 this.inverseMass = 0;
@@ -32,6 +34,7 @@ namespace Radius2D
                 this.inverseMass = 1 / this.mass;
             };
             this.elasticity = elasticity;
+            this.shade = tint;
         }
 
         // Update Method for Balls/Circles
@@ -44,7 +47,7 @@ namespace Radius2D
             this.force.Y += 0.1f * this.mass;
 
             // Updating the Velocity using the Force
-            this.vel += this.force / this.mass * deltaTime * 60;
+            this.vel += this.force * this.inverseMass * deltaTime * 60;
 
             // Checking if Horizontal Velocity is in the Terminal Velocity
             if (this.vel.X >= terminalVel)
@@ -65,7 +68,7 @@ namespace Radius2D
             };
 
             // Updating the Ball's/Circle's Position using the Velocity
-            this.pos += this.vel * deltaTime * 60;
+            this.pos += this.vel * deltaTime * 60 * this.mass * this.inverseMass;
 
             // Renewing the Force Vector
             this.force = new Vector2(0, 0);
@@ -147,7 +150,7 @@ namespace Radius2D
         // Method to draw the Balls/Circles
         public void Draw()
         {
-            Raylib.DrawCircleV(this.pos, this.radius - 1, Color.WHITE);
+            Raylib.DrawCircleV(this.pos, this.radius - 1, this.shade);
             Raylib.DrawCircleLines((int)this.pos.X, (int)this.pos.Y, this.radius - 1, Color.WHITE);
         }
     }

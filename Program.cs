@@ -27,20 +27,37 @@ namespace Radius2D
             lines.Add(line04);
 
             // Initializing the List of Balls/Circles
-            int numOfCircles = 150;
+            int numOfCircles = 10;
             List<Circle> circles = new List<Circle>(0);
             for (int i = 0; i < numOfCircles; i++)
             {
-                var newCirc = new Circle(Raylib.GetRandomValue(0, Width), -30 * i, 0, 0, 20, 0.8f);
+                var newCirc = new Circle((30 * i) + 100, 20, Raylib.GetRandomValue(-4, 4), Raylib.GetRandomValue(-4, 4), 20, 30, 0.8f, Color.RAYWHITE);
 
                 circles.Add(newCirc);
+            }
+            for (var i = 0; i < numOfCircles; i++)
+            {
+                var newCirc = new Circle(Width / 4, -30 * i, 0, 0, 20, 1, 0.8f, Color.GRAY);
+                circles.Add(newCirc);
+            }
+            circles[0].mass = 0;
+            circles[0].inverseMass = 0;
+            circles[numOfCircles - 1].mass = 0;
+            circles[numOfCircles - 1].inverseMass = 0;
+            //circles[0].pos = new Vector2(200, 450);
+
+            List<Joint> links = new List<Joint>(0);
+            for (var i = 0; i < numOfCircles - 1; i++)
+            {
+                var newLink = new Joint(circles[i], circles[i + 1], 10);
+                links.Add(newLink);
             }
 
             // Some Extra Variables
             float FPS;
             float deltaTime;
             string fpsText;
-            int subSteps = 4;
+            int subSteps = 2;
 
             // Setting FrameRate and Starting the Main Loop
             //Raylib.SetTargetFPS(120);
@@ -70,6 +87,11 @@ namespace Radius2D
                     };
                 }
                 
+                foreach (Joint link in links)
+                {
+                    link.update(deltaTime / subSteps);
+                }
+                
                 // Rendering Section of the Program
                 Raylib.BeginDrawing();
                     // Drawing Background
@@ -77,6 +99,11 @@ namespace Radius2D
 
                     // Draw the current FrameRate
                     Raylib.DrawText(fpsText, 20, 20, 20, Color.RAYWHITE);
+
+                    foreach (Joint link in links)
+                    {
+                        link.draw();
+                    }
 
                     // Drawing every Ball/Circle
                     foreach (Circle circ in circles)
