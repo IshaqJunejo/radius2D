@@ -27,31 +27,27 @@ namespace Radius2D
             lines.Add(line04);
 
             // Initializing the List of Balls/Circles
-            int numOfCircles = 10;
+            int numOfRows = 2;
             List<Circle> circles = new List<Circle>(0);
-            for (int i = 0; i < numOfCircles; i++)
+            for (int i = 0; i < numOfRows; i++)
             {
-                var newCirc = new Circle((30 * i) + 100, 20, Raylib.GetRandomValue(-4, 4), Raylib.GetRandomValue(-4, 4), 20, 30, 0.8f, Color.RAYWHITE);
-
+                var newCirc = new Circle((50 * i) + 500, (50 * i) + 200, 0, 0, 10, 50, 0.8f, Color.RAYWHITE);
+                var newCircle = new Circle((50 * i) + 550, (50 * i) + 250, 0, 0, 10, 50, 0.8f, Color.RAYWHITE);
                 circles.Add(newCirc);
+                circles.Add(newCircle);
             }
-            for (var i = 0; i < numOfCircles; i++)
-            {
-                var newCirc = new Circle(Width / 4, -30 * i, 0, 0, 20, 1, 0.8f, Color.GRAY);
-                circles.Add(newCirc);
-            }
-            circles[0].mass = 0;
-            circles[0].inverseMass = 0;
-            circles[numOfCircles - 1].mass = 0;
-            circles[numOfCircles - 1].inverseMass = 0;
-            //circles[0].pos = new Vector2(200, 450);
 
             List<Spring> links = new List<Spring>(0);
-            for (var i = 0; i < numOfCircles - 1; i++)
-            {
-                var newLink = new Spring(circles[i], circles[i + 1], 10);
-                links.Add(newLink);
-            }
+            var temp = new Spring(circles[0], circles[1], 90);
+            var temp_spring = new Spring(circles[2], circles[3], 90);
+            var temp_spring_00 = new Spring(circles[0], circles[2], 90);
+            var temp_spring_01 = new Spring(circles[1], circles[3], 90);
+            var newSpring = new Spring(circles[0], circles[3], 90 * 1.41421f);
+            links.Add(newSpring);
+            links.Add(temp);
+            links.Add(temp_spring);
+            links.Add(temp_spring_00);
+            links.Add(temp_spring_01);
 
             // Some Extra Variables
             float FPS;
