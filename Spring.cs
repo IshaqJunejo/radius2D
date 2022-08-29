@@ -3,12 +3,13 @@ using Raylib_cs;
 
 namespace Radius2D
 {
-    public class Joint
+    public class Spring
     {
         private Circle ball1;
         private Circle ball2;
         private float length;
-        public Joint(Circle circ1, Circle circ2, float length)
+        private float stiffness;
+        public Spring(Circle circ1, Circle circ2, float length)
         {
             this.ball1 = circ1;
             this.ball2 = circ2;
@@ -20,22 +21,20 @@ namespace Radius2D
             {
                 this.length = circ1.radius + circ2.radius;
             }
+            this.stiffness = 1.0f;
             
         }
 
         public void update(float deltaTime)
         {
-            for (int i = 0; i < 5; i++)
-            {
-                Vector2 axis = this.ball1.pos - this.ball2.pos;
-                float dist = (float) Math.Sqrt((axis.X * axis.X) + (axis.Y * axis.Y));
-                Vector2 normal = axis / dist;
-            
-                float different = this.length - dist;
+            Vector2 len = this.ball1.pos - this.ball2.pos;
+            float distance = (float) Math.Sqrt(len.X * len.X + len.Y * len.Y);
+            Vector2 normal = len / distance;
 
-                this.ball1.pos += different * normal * 0.5f * this.ball1.inverseMass * this.ball1.mass;
-                this.ball2.pos -= different * normal * 0.5f * this.ball2.inverseMass * this.ball2.mass;
-            }
+            float deltaLength = distance - this.length;
+
+            this.ball1.force += normal * deltaLength * this.stiffness;
+            this.ball2.force -= normal * deltaLength * this.stiffness;
         }
 
         public void draw()

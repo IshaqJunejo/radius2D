@@ -46,10 +46,10 @@ namespace Radius2D
             circles[numOfCircles - 1].inverseMass = 0;
             //circles[0].pos = new Vector2(200, 450);
 
-            List<Joint> links = new List<Joint>(0);
+            List<Spring> links = new List<Spring>(0);
             for (var i = 0; i < numOfCircles - 1; i++)
             {
-                var newLink = new Joint(circles[i], circles[i + 1], 10);
+                var newLink = new Spring(circles[i], circles[i + 1], 10);
                 links.Add(newLink);
             }
 
@@ -87,7 +87,7 @@ namespace Radius2D
                     };
                 }
                 
-                foreach (Joint link in links)
+                foreach (Spring link in links)
                 {
                     link.update(deltaTime / subSteps);
                 }
@@ -100,7 +100,7 @@ namespace Radius2D
                     // Draw the current FrameRate
                     Raylib.DrawText(fpsText, 20, 20, 20, Color.RAYWHITE);
 
-                    foreach (Joint link in links)
+                    foreach (Spring link in links)
                     {
                         link.draw();
                     }
