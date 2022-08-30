@@ -3,13 +3,17 @@ using Raylib_cs;
 
 namespace Radius2D
 {
+    // Class for the Spring Connections
     public class Spring
     {
+        // Few Private Variables
         private Circle ball1;
         private Circle ball2;
         private float length;
         private float stiffness;
         private float dampFactor;
+
+        // Constructor
         public Spring(Circle circ1, Circle circ2, float length, float stiff, float damp)
         {
             this.ball1 = circ1;
@@ -26,7 +30,8 @@ namespace Radius2D
             this.dampFactor = damp;
             
         }
-
+        
+        // Update Function to update Springs
         public void update(float deltaTime)
         {
             // Finding the Normalized Position vector
@@ -53,9 +58,10 @@ namespace Radius2D
             this.ball2.force += totalForce;
         }
 
+        // Function to Draw Springs (as Lines)
         public void draw()
         {
-            Raylib.DrawLineV(ball1.pos, ball2.pos, Color.WHITE);
+            Raylib.DrawLineV(ball1.pos, ball2.pos, Color.BLACK);
         }
     }
 }

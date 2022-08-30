@@ -1,5 +1,4 @@
-﻿using System.Numerics;
-using Raylib_cs;
+﻿using Raylib_cs;
 
 // Namespace for the Physics Simulation
 namespace Radius2D
@@ -26,7 +25,7 @@ namespace Radius2D
             var line04 = new Line(0, Height, Width, Height);
             lines.Add(line04);
 
-            // Initializing the List of Balls/Circles and Springs
+            // Initializing the List of Balls/Circles
             int numOfCircs = 10;
             float radie = 50;
             List<Circle> circles = new List<Circle>(0);
@@ -38,6 +37,7 @@ namespace Radius2D
                 circles.Add(newCirc);
             }
 
+            // Initializing the List of Spring connected to Balls/Circles
             List<Spring> links = new List<Spring>(0);
             for (int i = 0; i < numOfCircs; i++)
             {
