@@ -26,28 +26,31 @@ namespace Radius2D
             var line04 = new Line(0, Height, Width, Height);
             lines.Add(line04);
 
-            // Initializing the List of Balls/Circles
-            int numOfRows = 2;
+            // Initializing the List of Balls/Circles and Springs
+            int numOfCircs = 10;
+            float radie = 50;
             List<Circle> circles = new List<Circle>(0);
-            for (int i = 0; i < numOfRows; i++)
+            var centerOfCirc = new Circle(500, 150, 0, 0, 15, 20, 0.8f, Color.GRAY);
+            circles.Add(centerOfCirc);
+            for (float i = 0; i < 360; i += 360 / numOfCircs)
             {
-                var newCirc = new Circle((50 * i) + 500, (50 * i) + 200, 0, 0, 10, 50, 0.8f, Color.RAYWHITE);
-                var newCircle = new Circle((50 * i) + 550, (50 * i) + 250, 0, 0, 10, 50, 0.8f, Color.RAYWHITE);
+                var newCirc = new Circle(500 + (float)((Math.Cos(i * Math.PI / 180)) * radie), 150 + (float)((Math.Sin(i * Math.PI / 180)) * radie), 0, 0, 10, 20, 0.8f, Color.WHITE);
                 circles.Add(newCirc);
-                circles.Add(newCircle);
             }
 
             List<Spring> links = new List<Spring>(0);
-            var temp = new Spring(circles[0], circles[1], 90);
-            var temp_spring = new Spring(circles[2], circles[3], 90);
-            var temp_spring_00 = new Spring(circles[0], circles[2], 90);
-            var temp_spring_01 = new Spring(circles[1], circles[3], 90);
-            var newSpring = new Spring(circles[0], circles[3], 90 * 1.41421f);
-            links.Add(newSpring);
-            links.Add(temp);
-            links.Add(temp_spring);
-            links.Add(temp_spring_00);
-            links.Add(temp_spring_01);
+            for (int i = 0; i < numOfCircs; i++)
+            {
+                var newLink = new Spring(circles[0], circles[i + 1], radie, 25.0f, 5.0f);
+                links.Add(newLink);
+                if (i != 0)
+                {
+                    var internalLink = new Spring(circles[i], circles[i + 1], (radie * 2.0f * (float) Math.PI) / numOfCircs, 25.0f, 5.0f);
+                    links.Add(internalLink);
+                }
+            }
+            var extraLink = new Spring(circles[1], circles[numOfCircs], (radie * 2.0f * (float) Math.PI) / numOfCircs, 25.0f, 5.0f);
+            links.Add(extraLink);
 
             // Some Extra Variables
             float FPS;

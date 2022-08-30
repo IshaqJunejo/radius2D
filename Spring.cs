@@ -10,7 +10,7 @@ namespace Radius2D
         private float length;
         private float stiffness;
         private float dampFactor;
-        public Spring(Circle circ1, Circle circ2, float length)
+        public Spring(Circle circ1, Circle circ2, float length, float stiff, float damp)
         {
             this.ball1 = circ1;
             this.ball2 = circ2;
@@ -22,8 +22,8 @@ namespace Radius2D
             {
                 this.length = circ1.radius + circ2.radius;
             }
-            this.stiffness = 5.0f;
-            this.dampFactor = 1.0f;
+            this.stiffness = stiff;
+            this.dampFactor = damp;
             
         }
 
