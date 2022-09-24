@@ -48,7 +48,7 @@ namespace Radius2D
 
             // Updating the Velocity using the Force
             this.vel += this.force * this.inverseMass * deltaTime * 60;
-
+                        
             // Checking if Horizontal Velocity is in the Terminal Velocity
             if (this.vel.X >= terminalVel)
             {
@@ -89,11 +89,11 @@ namespace Radius2D
                     Vector2 normal = distance / length;
 
                     float depth = (this.radius + circ.radius) - length;
-                    Vector2 pentrateResolve = normal * depth / 2;
+                    Vector2 pentrateResolve = normal * depth / (this.mass + circ.mass);
 
                     // Executing Penetration
-                    this.pos += pentrateResolve;
-                    circ.pos -= pentrateResolve;
+                    this.pos += pentrateResolve * this.mass;
+                    circ.pos -= pentrateResolve * circ.mass;
 
                     // Calculating Repulsion
                     float productOfElasticity = this.elasticity * circ.elasticity;
@@ -150,8 +150,7 @@ namespace Radius2D
         // Method to draw the Balls/Circles
         public void Draw()
         {
-            Raylib.DrawCircleV(this.pos, this.radius - 1, this.shade);
-            Raylib.DrawCircleLines((int)this.pos.X, (int)this.pos.Y, this.radius - 1, Color.WHITE);
+            Raylib.DrawCircleV(this.pos, this.radius, this.shade);
         }
     }
 }
