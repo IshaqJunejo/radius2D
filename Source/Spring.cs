@@ -61,7 +61,7 @@ namespace Radius2D
         // Function to Draw Springs (as Lines)
         public void draw()
         {
-            Raylib.DrawLineV(ball1.pos, ball2.pos, Color.BLACK);
+            Raylib.DrawLineV(ball1.pos, ball2.pos, Color.WHITE);
         }
     }
 }
