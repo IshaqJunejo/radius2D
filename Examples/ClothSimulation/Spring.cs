@@ -7,9 +7,9 @@ namespace Radius2D
     public class Spring
     {
         // Few Private Variables
-        private Circle ball1;
-        private Circle ball2;
-        private float length;
+        public Circle ball1;
+        public Circle ball2;
+        public float length;
         private float stiffness;
         private float dampFactor;
 

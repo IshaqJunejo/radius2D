@@ -88,10 +88,10 @@ namespace Radius2D
                 foreach (Circle circle in circles)
                 {
                     // Applying Force to Circles (Wind Force) to Showcase the Cloth Simulation Effect
-                    if (Raylib.IsMouseButtonDown(MouseButton.MOUSE_BUTTON_LEFT))
+                    if (Raylib.IsKeyDown(KeyboardKey.KEY_D))
                     {
                         circle.force.X += 0.05f * circle.mass;
-                    }else if (Raylib.IsMouseButtonDown(MouseButton.MOUSE_BUTTON_RIGHT))
+                    }else if (Raylib.IsKeyDown(KeyboardKey.KEY_A))
                     {
                         circle.force.X -= 0.05f * circle.mass;
                     }
@@ -109,9 +109,19 @@ namespace Radius2D
                     }
                 };
                 
+                Spring toBeRemoved = new Spring(circles[0], circles[1], 1, 1, 1);
                 foreach (Spring link in links)
                 {
                     link.update(deltaTime);
+
+                    if (Raylib.IsMouseButtonDown(MouseButton.MOUSE_BUTTON_LEFT) && Collision.SpringToPoint(link, Raylib.GetMousePosition()))
+                    {
+                        toBeRemoved = link;
+                    }
+                }
+                if (links.Contains(toBeRemoved))
+                {
+                    links.Remove(toBeRemoved);
                 }
                 
                 // Rendering Section of the Program

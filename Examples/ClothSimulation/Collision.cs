@@ -55,5 +55,25 @@ namespace Radius2D
                 return circ.radius * 2;
             }
         }
+
+        // Method to Check Collision between Spring And a Point
+        public static bool SpringToPoint(Spring spr, Vector2 point)
+        {
+            float angleToPoint = (float) Math.Atan2(spr.ball1.pos.Y - point.Y, spr.ball1.pos.X - point.X);
+            float magnitude = (float) Math.Sqrt((spr.ball1.pos.X - point.X) * (spr.ball1.pos.X - point.X) + (spr.ball1.pos.Y - point.Y) * (spr.ball1.pos.Y - point.Y));
+
+            float angleOfSpr = (float) Math.Atan2(spr.ball1.pos.Y - spr.ball2.pos.Y, spr.ball1.pos.X - spr.ball2.pos.X);
+            float magnitudeOfSpr = (float) Math.Sqrt((spr.ball1.pos.X - spr.ball2.pos.X) * (spr.ball1.pos.X - spr.ball2.pos.X) + (spr.ball1.pos.Y - spr.ball2.pos.Y) * (spr.ball1.pos.Y - spr.ball2.pos.Y));
+
+            if (angleToPoint >= angleOfSpr - 0.000001f || angleToPoint <= angleOfSpr + 0.000001f)
+            {
+                if (magnitude <= magnitudeOfSpr)
+                {
+                    return true;
+                }                
+            }
+
+            return false;
+        }
     }
 }
