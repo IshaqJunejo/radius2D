@@ -13,7 +13,7 @@ namespace Radius2D
             springs = new List<Spring>(0);
         }
 
-        public void UpdateLayer(float deltaTime)
+        public void Update(float deltaTime)
         {
             // Iterating through the list of Circles
             foreach (Circle circle in this.circles)
@@ -34,11 +34,11 @@ namespace Radius2D
             // Iterating through springs for updating them
             foreach (Spring spring in this.springs)
             {
-                spring.update(deltaTime);
+                spring.Update(deltaTime);
             }
         }
 
-        public void DrawLayer()
+        public void Draw()
         {
             // Iterating through circle for rendering them
             foreach (Circle circle in this.circles)
@@ -49,13 +49,13 @@ namespace Radius2D
             // Iterating through lines for rendering them
             foreach (Line line in this.lines)
             {
-                line.DrawLine();
+                line.Draw();
             }
 
             // Iterating through springs for rendering them
             foreach (Spring spring in this.springs)
             {
-                spring.draw();
+                spring.Draw();
             }
         }
     }

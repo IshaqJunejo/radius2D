@@ -31,8 +31,8 @@ namespace Radius2D
             
         }
         
-        // Update Function to update Springs
-        public void update(float deltaTime)
+        // Update Function to Update Springs
+        public void Update(float deltaTime)
         {
             // Finding the Normalized Position vector
             Vector2 len = this.ball1.pos - this.ball2.pos;
@@ -59,7 +59,7 @@ namespace Radius2D
         }
 
         // Function to Draw Springs (as Lines)
-        public void draw()
+        public void Draw()
         {
             Raylib.DrawLineV(ball1.pos, ball2.pos, Color.WHITE);
         }

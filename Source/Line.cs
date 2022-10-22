@@ -12,7 +12,7 @@ namespace Radius2D
         public float length;
         public float angle;
 
-        // Method to update Values of the Line, it will be used right after initializing (or Updating) the Line
+        // Method to Update Values of the Line, it will be used right after initializing (or Updating) the Line
         public Line(float posX1, float posY1, float posX2, float posY2)
         {
             this.p = new Vector2(posX1, posY1);
@@ -23,7 +23,7 @@ namespace Radius2D
         }
 
         // Method to Draw the Line
-        public void DrawLine()
+        public void Draw()
         {
             Raylib.DrawLineV(this.p, this.q, Color.RAYWHITE);
         }

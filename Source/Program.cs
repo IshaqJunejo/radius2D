@@ -50,7 +50,7 @@ namespace Radius2D
                 deltaTime = Raylib.GetFrameTime();
 
                 // Updating the Physics Layer
-                Layer.UpdateLayer(deltaTime);
+                Layer.Update(deltaTime);
                 
                 // Rendering Section of the Program
                 Raylib.BeginDrawing();
@@ -61,7 +61,7 @@ namespace Radius2D
                     Raylib.DrawText(fpsText, 20, 20, 20, Color.RAYWHITE);
 
                     // Drawing the Physics Layer's every Element
-                    Layer.DrawLayer();
+                    Layer.Draw();
                 
                 // End of Rendering section
                 Raylib.EndDrawing();
