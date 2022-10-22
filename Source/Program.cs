@@ -14,24 +14,25 @@ namespace Radius2D
             const int Height = 950;
             Raylib.InitWindow(Width, Height, "Physics Simulation");
 
-            // Initializing the List of Lines
-            List<Line> lines = new List<Line>(0);
-            var line01 = new Line(Width, 1, 0, 1);
-            lines.Add(line01);
-            var line02 = new Line(1, 0, 1, Height);
-            lines.Add(line02);
-            var line03 = new Line(Width, 0, Width, Height);
-            lines.Add(line03);
-            var line04 = new Line(0, Height, Width, Height);
-            lines.Add(line04);
+            // Initiating the Physics Layer
+            var Layer = new PhysicsLayer();
 
-            // Initializing the List of Balls/Circles
+            // Adding Lines in the Physics Layer
+            var line01 = new Line(Width, 1, 0, 1);
+            Layer.lines.Add(line01);
+            var line02 = new Line(1, 0, 1, Height);
+            Layer.lines.Add(line02);
+            var line03 = new Line(Width, 0, Width, Height);
+            Layer.lines.Add(line03);
+            var line04 = new Line(0, Height, Width, Height);
+            Layer.lines.Add(line04);
+
+            // Adding Circles in the Physics Layer
             int numOfCircs = 480;
-            List<Circle> circles = new List<Circle>(0);
             for (var i = 0; i < numOfCircs; i++)
             {
                 var newCirc = new Circle(Raylib.GetRandomValue(0, Width), Raylib.GetRandomValue(0, Height), Raylib.GetRandomValue(-5, 5), Raylib.GetRandomValue(-5, 5), 15, 20, 1.0f, Color.WHITE);
-                circles.Add(newCirc);
+                Layer.circles.Add(newCirc);
             }
 
             // Some Extra Variables
@@ -48,21 +49,8 @@ namespace Radius2D
                 fpsText = Convert.ToString(FPS);
                 deltaTime = Raylib.GetFrameTime();
 
-                    // Iterating through the List of Balls/Circles
-                    foreach (Circle circle in circles)
-                    {
-                    // Updating the Positions of Balls/Circles
-                    circle.Update(Width, Height, deltaTime);
-                    // Looking for and Resolving the Collision between the Balls/Circles
-                    foreach (Circle circ in circles)
-                    {
-                        circle.CollisionResponseCircle(circ, deltaTime);
-                    }
-                    foreach (Line l in lines)
-                    {
-                        circle.CollisionResponseLine(l, deltaTime);
-                    }
-                };
+                // Updating the Physics Layer
+                Layer.UpdateLayer(deltaTime);
                 
                 // Rendering Section of the Program
                 Raylib.BeginDrawing();
@@ -72,16 +60,8 @@ namespace Radius2D
                     // Draw the current FrameRate
                     Raylib.DrawText(fpsText, 20, 20, 20, Color.RAYWHITE);
 
-                    // Drawing every Ball/Circle
-                    foreach (Circle circ in circles)
-                    {
-                        circ.Draw();
-                    }
-                    // Drawing every Line
-                    foreach (Line l in lines)
-                    {
-                        l.DrawLine();
-                    }
+                    // Drawing the Physics Layer's every Element
+                    Layer.DrawLayer();
                 
                 // End of Rendering section
                 Raylib.EndDrawing();
