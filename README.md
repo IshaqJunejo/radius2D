@@ -1,6 +1,6 @@
 <p align="center">
     <a href="https://github.com/MIJGames/radius2D">
-        <img src="logo.png" width="70%" alt="Radius2D Logo">
+        <img src="Images/logo.png" width="70%" alt="Radius2D Logo">
     </a>
 </p>
 
@@ -21,10 +21,10 @@ Clone this repo and execute ``dotnet run`` in the ``Radius2D/Source`` directory.
 
 <p align="center">
     <a href="https://github.com/MIJGames/radius2D/Examples/ClothSimulation">
-        <img src="Examples/Images/Cloth_Sim.png" width="49.5%" alt="Cloth Simulation">
+        <img src="Images/Cloth_Sim.png" width="49.5%" alt="Cloth Simulation">
     </a>
     <a href="https://github.com/MIJGames/radius2D/Examples/SoftBodySimulation">
-        <img src="Examples/Images/SoftBody_Sim.png" width="49.5%" alt="Cloth Simulation">
+        <img src="Images/SoftBody_Sim.png" width="49.5%"  alt="Cloth Simulation">
     </a>
 </p>
 
