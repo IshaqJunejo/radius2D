@@ -11,7 +11,7 @@ It uses [Raylib](https://github.com/raysan5/raylib) for rendering and Keyboard I
 As it now have been shifted into C#, it use [Raylib_cs](https://github.com/ChrisDill/Raylib-cs) which basically is a C# wrapper for Raylib.
 
 
-## How To Use
+## How To Install
 
 To use this, you need the .NET SDK, if you don't have you can [download](https://dotnet.microsoft.com/en-us/download) from here.
 
@@ -44,6 +44,61 @@ It also have Mouse inputs for Simulating Wind Effects,
 This is also a sample simulation of Radius2D,
 
 This simply is a Soft Body Simulation having a Circle in the center and few more Circles around that and all the circles are connected through Springs which gives it Soft Body Effect.
+
+## How to Use
+
+After yu have added all files in ``/Source`` directory in your project (except ``Program.cs`` and ``Radius2d.csproj``). You need to include Radius2D in your ``Program.cs`` file.
+```cs
+using Radius2D;
+```
+Now you need to initialize the Physics Layer
+```cs
+var Layer = new PhysicsLayer();
+```
+You can now add Circles, Lines and Springs in the Lists of your Physics Layer,
+```cs
+// Adding Circles in the Physics Layer
+for (int i = 0; i < 10; i++)
+{
+    int posX = Raylib.GetRandomValue(0, 1920);
+    int posY = Raylib.GetRandomValue(0, 1080);
+
+    var Circ = new Circle(posX, posY, 0, 0, 15, 20, 1.0f, Color.White);
+
+    Layer.circles.Add(Circ);
+}
+```
+```cs
+// Adding Lines in the Physics Layer
+var line01 = new Line(Width, 0, 0, 0);
+Layer.lines.Add(line01);
+var line02 = new Line(0, 0, 0, Height);
+Layer.lines.Add(line02);
+var line03 = new Line(Width, 0, Width, Height);
+Layer.lines.Add(line03);
+var line04 = new Line(0, Height, Width, Height);
+Layer.lines.Add(line04);
+```
+```cs
+// Adding Springs in the Physics Layer
+var link01 = new Spring(Layer.circles[0], Layer.circles[1], 70.0f, 20, 10);
+Layer.springs.Add(link01);
+var link02 = new Spring(Layer.circles[1], Layer.circles[2], 70.0f, 20, 10);
+Layer.springs.Add(link02);
+var link03 = new Spring(Layer.circles[2], Layer.circles[0], 70.0f, 20, 10);
+Layer.springs.Add(link03);
+```
+Now you just need to Update the Physics in the Main Loop
+```cs
+Layer.Update(deltaTime);
+```
+And Draw it in Rendering section of the Main Loop,
+```cs
+Layer.Draw();
+```
+This is pretty much it, You can have a look at the Examples. There are currently only two examples, Soft Body Simulation in ``Examples/SoftBodySimulation`` and Cloth Simulation in ``Examples/ClothSimulation``.
+
+if any kind of help regarding this is needed, you can just [mail me](mailto:ishaquejunejo33+radius2d@gmail.com).
 
 ## License
 
