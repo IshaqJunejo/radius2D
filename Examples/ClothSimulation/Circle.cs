@@ -38,7 +38,7 @@ namespace Radius2D
         }
 
         // Update Method for Balls/Circles
-        public void Update(int W, int H, float deltaTime)
+        public void Update(float deltaTime)
         {
             // Initializing Terminal(Maximum) Velocity
             float terminalVel = 7.5f;

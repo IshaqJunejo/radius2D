@@ -23,7 +23,7 @@ namespace Radius2D
         }
 
         // Method to Draw the Line
-        public void DrawLine()
+        public void Draw()
         {
             Raylib.DrawLineV(this.p, this.q, Color.RAYWHITE);
         }
