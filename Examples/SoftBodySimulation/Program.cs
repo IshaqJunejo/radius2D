@@ -14,56 +14,55 @@ namespace Radius2D
             const int Height = 950;
             Raylib.InitWindow(Width, Height, "Physics Simulation");
 
+            // Initializing the Physics Layer
+            var layer = new PhysicsLayer();
+
             // Initializing the List of Lines
-            List<Line> lines = new List<Line>(0);
             var line01 = new Line(-50, 600, Width - 250, Height - 1);
-            lines.Add(line01);
+            layer.lines.Add(line01);
             var line02 = new Line(1, 0, 1, Height);
-            lines.Add(line02);
+            layer.lines.Add(line02);
             var line03 = new Line(Width, 0, Width, Height);
-            lines.Add(line03);
+            layer.lines.Add(line03);
             var line04 = new Line(0, Height, Width, Height);
-            lines.Add(line04);
+            layer.lines.Add(line04);
             var line05 = new Line(Width / 2, 350, Width, 150);
-            lines.Add(line05);
+            layer.lines.Add(line05);
             var line06 = new Line(Width / 2, 350, Width, 500);
-            lines.Add(line06);
+            layer.lines.Add(line06);
 
             // Initializing the List of Balls/Circles
             int numOfCircs = 10;
             float radie = 50;
-            List<Circle> circles = new List<Circle>(0);
             var centerOfCirc = new Circle(700, 150, 0, 0, 15, 20, 0.8f, Color.GRAY);
-            circles.Add(centerOfCirc);
+            layer.circles.Add(centerOfCirc);
             for (float i = 0; i < 360; i += 360 / numOfCircs)
             {
                 var newCirc = new Circle(700 + (float)((Math.Cos(i * Math.PI / 180)) * radie), 150 + (float)((Math.Sin(i * Math.PI / 180)) * radie), 0, 0, 10, 20, 0.8f, Color.WHITE);
-                circles.Add(newCirc);
+                layer.circles.Add(newCirc);
             }
 
             // Initializing the List of Spring connected to Balls/Circles
-            List<Spring> links = new List<Spring>(0);
             for (int i = 0; i < numOfCircs; i++)
             {
-                var newLink = new Spring(circles[0], circles[i + 1], radie, 15.0f, 5.0f);
-                links.Add(newLink);
+                var newLink = new Spring(layer.circles[0], layer.circles[i + 1], radie, 15.0f, 5.0f);
+                layer.springs.Add(newLink);
                 if (i != 0)
                 {
-                    var internalLink = new Spring(circles[i], circles[i + 1], (radie * 2.0f * (float) Math.PI) / numOfCircs, 15.0f, 5.0f);
-                    links.Add(internalLink);
+                    var internalLink = new Spring(layer.circles[i], layer.circles[i + 1], (radie * 2.0f * (float) Math.PI) / numOfCircs, 15.0f, 5.0f);
+                    layer.springs.Add(internalLink);
                 }
             }
-            var extraLink = new Spring(circles[1], circles[numOfCircs], (radie * 2.0f * (float) Math.PI) / numOfCircs, 15.0f, 5.0f);
-            links.Add(extraLink);
+            var extraLink = new Spring(layer.circles[1], layer.circles[numOfCircs], (radie * 2.0f * (float) Math.PI) / numOfCircs, 15.0f, 5.0f);
+            layer.springs.Add(extraLink);
 
             // Some Extra Variables
             float FPS;
             float deltaTime;
             string fpsText;
-            int subSteps = 2;
 
             // Setting FrameRate and Starting the Main Loop
-            //Raylib.SetTargetFPS(120);
+            Raylib.SetTargetFPS(120);
             while (!Raylib.WindowShouldClose())
             {
                 // Updating the Extra Variables
@@ -71,29 +70,7 @@ namespace Radius2D
                 fpsText = Convert.ToString(FPS);
                 deltaTime = Raylib.GetFrameTime();
 
-                for (int i = 0; i < subSteps; i++)
-                {
-                    // Iterating through the List of Balls/Circles
-                    foreach (Circle circle in circles)
-                    {
-                        // Updating the Positions of Balls/Circles
-                        circle.Update(Width, Height, deltaTime / subSteps);
-                        // Looking for and Resolving the Collision between the Balls/Circles
-                        foreach (Circle circ in circles)
-                        {
-                            circle.CollisionResponseCircle(circ, deltaTime / subSteps);
-                        }
-                        foreach (Line l in lines)
-                        {
-                            circle.CollisionResponseLine(l, deltaTime / subSteps);
-                        }
-                    };
-                }
-                
-                foreach (Spring link in links)
-                {
-                    link.update(deltaTime / subSteps);
-                }
+                layer.Update(deltaTime);
                 
                 // Rendering Section of the Program
                 Raylib.BeginDrawing();
@@ -103,21 +80,7 @@ namespace Radius2D
                     // Draw the current FrameRate
                     Raylib.DrawText(fpsText, 20, 20, 20, Color.RAYWHITE);
 
-                    foreach (Spring link in links)
-                    {
-                        link.draw();
-                    }
-
-                    // Drawing every Ball/Circle
-                    foreach (Circle circ in circles)
-                    {
-                        circ.Draw();
-                    }
-                    // Drawing every Line
-                    foreach (Line l in lines)
-                    {
-                        l.DrawLine();
-                    }
+                    layer.Draw();
                 
                 // End of Rendering section
                 Raylib.EndDrawing();
