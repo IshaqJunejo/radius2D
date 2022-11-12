@@ -15,7 +15,7 @@ As it now have been shifted into C#, it use [Raylib_cs](https://github.com/Chris
 
 To use this, you need the .NET SDK, if you don't have you can [download](https://dotnet.microsoft.com/en-us/download) from here.
 
-Clone this repo and execute ``dotnet run`` in the ``Radius2D/Source`` directory.
+Install the [MIJGames.Radius2D](https://www.nuget.org/packages/MIJGames.Radius2D) Nuget Package.
 
 ## Examples
 
@@ -47,8 +47,9 @@ This simply is a Soft Body Simulation having a Circle in the center and few more
 
 ## How to Use
 
-After yu have added all files in ``/Source`` directory in your project (except ``Program.cs`` and ``Radius2d.csproj``). You need to include Radius2D in your ``Program.cs`` file.
+You need to include Radius2D and Raylib_cs in your ``Program.cs`` file.
 ```cs
+using Raylib_cs;
 using Radius2D;
 ```
 Now you need to initialize the Physics Layer
