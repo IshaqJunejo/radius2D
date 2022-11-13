@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MIJGames.Radius2D" Version="1.0.1" />
     <PackageReference Include="Raylib-cs" Version="4.0.0.1" />
   </ItemGroup>
 

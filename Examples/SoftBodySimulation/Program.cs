@@ -1,7 +1,8 @@
 ﻿using Raylib_cs;
+using Radius2D;
 
 // Namespace for the Physics Simulation
-namespace Radius2D
+namespace SoftBodySimulation
 {
     // Main Class of the program
     class Program
@@ -12,7 +13,7 @@ namespace Radius2D
             // Initializing the Window to be rendered on
             const int Width = 1050;
             const int Height = 950;
-            Raylib.InitWindow(Width, Height, "Physics Simulation");
+            Raylib.InitWindow(Width, Height, "Soft Body Simulation");
 
             // Initializing the Physics Layer
             var layer = new PhysicsLayer();
@@ -45,15 +46,15 @@ namespace Radius2D
             // Initializing the List of Spring connected to Balls/Circles
             for (int i = 0; i < numOfCircs; i++)
             {
-                var newLink = new Spring(layer.circles[0], layer.circles[i + 1], radie, 15.0f, 5.0f);
+                var newLink = new Spring(layer.circles[0], layer.circles[i + 1], radie, 3.0f, 1.0f);
                 layer.springs.Add(newLink);
                 if (i != 0)
                 {
-                    var internalLink = new Spring(layer.circles[i], layer.circles[i + 1], (radie * 2.0f * (float) Math.PI) / numOfCircs, 15.0f, 5.0f);
+                    var internalLink = new Spring(layer.circles[i], layer.circles[i + 1], (radie * 2.0f * (float) Math.PI) / numOfCircs, 3.0f, 1.0f);
                     layer.springs.Add(internalLink);
                 }
             }
-            var extraLink = new Spring(layer.circles[1], layer.circles[numOfCircs], (radie * 2.0f * (float) Math.PI) / numOfCircs, 15.0f, 5.0f);
+            var extraLink = new Spring(layer.circles[1], layer.circles[numOfCircs], (radie * 2.0f * (float) Math.PI) / numOfCircs, 3.0f, 1.0f);
             layer.springs.Add(extraLink);
 
             // Some Extra Variables

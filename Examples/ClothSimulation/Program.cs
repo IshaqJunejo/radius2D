@@ -1,7 +1,8 @@
 ﻿using Raylib_cs;
+using Radius2D;
 
 // Namespace for the Physics Simulation
-namespace Radius2D
+namespace ClothSimulation
 {
     // Main Class of the program
     class Program
@@ -82,6 +83,33 @@ namespace Radius2D
                 FPS = Raylib.GetFPS();
                 fpsText = Convert.ToString(FPS);
                 deltaTime = Raylib.GetFrameTime();
+
+                // The Wind effect for our Cloth
+                foreach (Circle circ in layer.circles)
+                {
+                    if (Raylib.IsKeyDown(KeyboardKey.KEY_A))
+                    {
+                        circ.force.X -= 0.05f * deltaTime * 120 * circ.mass;
+                    }else if (Raylib.IsKeyDown(KeyboardKey.KEY_D))
+                    {
+                        circ.force.X += 0.05f * deltaTime * 120 * circ.mass;
+                    }
+                }
+
+                // Iterating through springs for updating them
+                Spring toBeRemoved = new Spring(layer.circles[0], layer.circles[1], 1, 1, 1);
+                foreach (Spring spring in layer.springs)
+                {
+                    if (Raylib.IsMouseButtonDown(MouseButton.MOUSE_BUTTON_LEFT) && Collision.SpringToPoint(spring, Raylib.GetMousePosition()))
+                    {
+                        toBeRemoved = spring;
+                    }
+                }
+
+                if (layer.springs.Contains(toBeRemoved))
+                {
+                    layer.springs.Remove(toBeRemoved);
+                }
 
                 layer.Update(deltaTime);
                 
