@@ -64,7 +64,7 @@ for (int i = 0; i < 10; i++)
     int posX = Raylib.GetRandomValue(0, 1920);
     int posY = Raylib.GetRandomValue(0, 1080);
 
-    var Circ = new Circle(posX, posY, 0, 0, 15, 20, 1.0f, Color.White);
+    var Circ = new Circle(posX, posY, 0, 0, 15, 20, 1.0f, Color.WHITE);
 
     Layer.circles.Add(Circ);
 }
