@@ -40,6 +40,9 @@ namespace Radius2D
             float deltaTime;
             string fpsText;
 
+            // Capsule
+            var cap = new Capsule(250, 100, 100, 30, 100, 0, Color.GOLD);
+
             // Setting FrameRate and Starting the Main Loop
             //Raylib.SetTargetFPS(120);
             while (!Raylib.WindowShouldClose())
@@ -51,6 +54,9 @@ namespace Radius2D
 
                 // Updating the Physics Layer
                 Layer.Update(deltaTime);
+
+                // Update the fucking capsule
+                cap.Update(deltaTime);
                 
                 // Rendering Section of the Program
                 Raylib.BeginDrawing();
@@ -62,6 +68,9 @@ namespace Radius2D
 
                     // Drawing the Physics Layer's every Element
                     Layer.Draw();
+
+                    // Drawing Capsule
+                    cap.Draw();
                 
                 // End of Rendering section
                 Raylib.EndDrawing();

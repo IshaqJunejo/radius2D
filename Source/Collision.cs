@@ -74,5 +74,15 @@ namespace Radius2D
 
             return false;
         }
+
+        public static float RadToDeg(float rad)
+        {
+            return rad * 180 / 3.142f;
+        }
+
+        public static float DegToRad(float deg)
+        {
+            return deg * 3.142f / 180;
+        }
     }
 }

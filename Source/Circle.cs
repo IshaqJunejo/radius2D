@@ -16,6 +16,7 @@ namespace Radius2D
         public float elasticity;
         public Color shade;
 
+        // Constructor
         public Circle(float posX, float posY, float velX, float velY, float radius, float mass, float elasticity, Color tint)
         {
             this.pos = new Vector2(posX, posY);
@@ -24,7 +25,6 @@ namespace Radius2D
             this.force = new Vector2(0, 0);
 
             this.radius = radius;
-            //this.mass = (float) Math.Pow(this.radius, 2) / 2.0f;
             this.mass = mass;
             if (this.mass == 0)
             {
