@@ -34,6 +34,22 @@ namespace Radius2D
             }
         }
 
+        // Method to Calculate collision between two Bounding Boxes
+        public static bool AABBToAABB(AABB a, AABB b)
+        {
+            if (a.getEdgeXMax() <= b.getEdgeXMin() || b.getEdgeXMax() <= a.getEdgeXMin())
+            {
+                return false;
+            }
+
+            if (a.getEdgeYMax() <= b.getEdgeYMin() || b.getEdgeYMax() <= a.getEdgeYMin())
+            {
+                return false;
+            }
+            
+            return true;
+        }
+
         // Method to calculate Collision between Ball/Circle and Line
         public static float CircleToLine(Line l, Circle circ)
         {

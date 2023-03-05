@@ -27,13 +27,9 @@ namespace Radius2D
             var line04 = new Line(0, Height, Width, Height);
             Layer.lines.Add(line04);
 
-            // Adding Circles in the Physics Layer
-            int numOfCircs = 480;
-            for (var i = 0; i < numOfCircs; i++)
-            {
-                var newCirc = new Circle(Raylib.GetRandomValue(0, Width), Raylib.GetRandomValue(0, Height), Raylib.GetRandomValue(-5, 5), Raylib.GetRandomValue(-5, 5), 15, 20, 1.0f, Color.WHITE);
-                Layer.circles.Add(newCirc);
-            }
+            // Adding AABB's to Physics Layer
+            var box01 = new AABB(100, 250, 50, 65, Color.BROWN);
+            var box02 = new AABB(300, 250, 65, 25, Color.BROWN);
 
             // Some Extra Variables
             float FPS;
@@ -51,6 +47,9 @@ namespace Radius2D
 
                 // Updating the Physics Layer
                 Layer.Update(deltaTime);
+
+                // Updating Position of 1 Bounding Box
+                box02.pos = Raylib.GetMousePosition();
                 
                 // Rendering Section of the Program
                 Raylib.BeginDrawing();
@@ -62,6 +61,16 @@ namespace Radius2D
 
                     // Drawing the Physics Layer's every Element
                     Layer.Draw();
+
+                    if (Collision.AABBToAABB(box01, box02))
+                    {
+                        box01.drawBoxC();
+                        box02.drawBoxC();
+                    }else
+                    {
+                        box01.drawBox();
+                        box02.drawBox();
+                    }
                 
                 // End of Rendering section
                 Raylib.EndDrawing();
