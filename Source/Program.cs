@@ -28,8 +28,8 @@ namespace Radius2D
             Layer.lines.Add(line04);
 
             // Adding AABB's to Physics Layer
-            var box01 = new AABB(100, 250, 50, 65, Color.BROWN);
-            var box02 = new AABB(300, 250, 65, 25, Color.BROWN);
+            var box01 = new AABB(100, 250, 65, 65, 1, Color.BROWN);
+            var box02 = new AABB(150, 50, 65, 25, 1, Color.BROWN);
 
             // Some Extra Variables
             float FPS;
@@ -48,7 +48,12 @@ namespace Radius2D
                 // Updating the Physics Layer
                 Layer.Update(deltaTime);
 
-                // Updating Position of 1 Bounding Box
+                box01.Update(deltaTime);
+                box02.Update(deltaTime);
+
+                box01.CollisionResponseBox(box02, deltaTime);
+
+                // Updating Position of 1st Bounding Box
                 box02.pos = Raylib.GetMousePosition();
                 
                 // Rendering Section of the Program
