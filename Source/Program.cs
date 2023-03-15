@@ -28,8 +28,13 @@ namespace Radius2D
             Layer.lines.Add(line04);
 
             // Adding AABB's to Physics Layer
-            var box01 = new AABB(100, 250, 65, 65, 1, Color.BROWN);
-            var box02 = new AABB(150, 50, 65, 25, 1, Color.BROWN);
+            List<AABB> boxes = new List<AABB>(0);
+
+            for (var i = 0; i < 500; i++)
+            {
+                AABB newBox = new AABB(Raylib.GetRandomValue(10, 1000), Raylib.GetRandomValue(10, 250), Raylib.GetRandomValue(5, 15), Raylib.GetRandomValue(5, 15), 1, Color.BROWN);
+                boxes.Add(newBox);
+            }
 
             // Some Extra Variables
             float FPS;
@@ -37,7 +42,7 @@ namespace Radius2D
             string fpsText;
 
             // Setting FrameRate and Starting the Main Loop
-            //Raylib.SetTargetFPS(120);
+            Raylib.SetTargetFPS(120);
             while (!Raylib.WindowShouldClose())
             {
                 // Updating the Extra Variables
@@ -48,13 +53,18 @@ namespace Radius2D
                 // Updating the Physics Layer
                 Layer.Update(deltaTime);
 
-                box01.Update(deltaTime);
-                box02.Update(deltaTime);
+                foreach (AABB box in boxes)
+                {
+                    box.Update(deltaTime);
+                }
 
-                box01.CollisionResponseBox(box02, deltaTime);
-
-                // Updating Position of 1st Bounding Box
-                box02.pos = Raylib.GetMousePosition();
+                foreach (AABB box in boxes)
+                {
+                    foreach (AABB BoundingBox in boxes)
+                    {
+                        box.CollisionResponseBox(BoundingBox, deltaTime);
+                    }
+                }
                 
                 // Rendering Section of the Program
                 Raylib.BeginDrawing();
@@ -67,14 +77,10 @@ namespace Radius2D
                     // Drawing the Physics Layer's every Element
                     Layer.Draw();
 
-                    if (Collision.AABBToAABB(box01, box02))
+                    foreach (AABB box in boxes)
                     {
-                        box01.drawBoxC();
-                        box02.drawBoxC();
-                    }else
-                    {
-                        box01.drawBox();
-                        box02.drawBox();
+                        //box.drawBox();
+                        box.drawBoxLine();
                     }
                 
                 // End of Rendering section

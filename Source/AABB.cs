@@ -11,6 +11,7 @@ namespace Radius2D
         public float width;
         public float height;
         public float mass;
+        public float elasticity;
         public float inverseMass;
         private Color shade;
 
@@ -29,6 +30,8 @@ namespace Radius2D
             {
                 this.inverseMass = 0.0f;
             }
+
+            this.elasticity = 0.5f;
 
             this.shade = color;
         }
@@ -63,6 +66,16 @@ namespace Radius2D
             if (this.pos.Y >= 950 - this.height)
             {
                 this.pos.Y = 950 - this.height;
+                this.vel.Y *= this.elasticity * -1;
+            }
+            if (this.pos.X <= 0)
+            {
+                this.pos.X = 0;
+                this.vel.X *= this.elasticity * -1;
+            }else if (this.pos.X >= 1050 - this.width)
+            {
+                this.pos.X = 1050 - this.width;
+                this.vel.X *= this.elasticity * -1;
             }
 
             this.force = new Vector2(0, 0);
@@ -83,10 +96,16 @@ namespace Radius2D
                         {
                             this.pos.X += depthX / 2;
                             box.pos.X -= depthX / 2;
+
+                            this.vel.X += (depthX * this.elasticity * box.elasticity) / 2;
+                            box.vel.X -= (depthX * this.elasticity * box.elasticity) / 2;
                         }else
                         {
                             this.pos.X -= depthX / 2;
                             box.pos.X += depthX / 2;
+
+                            this.vel.X -= (depthX * this.elasticity * box.elasticity) / 2;
+                            box.vel.X += (depthX * this.elasticity * box.elasticity) / 2;
                         }
                     }else
                     {
@@ -94,10 +113,16 @@ namespace Radius2D
                         {
                             this.pos.Y += depthY / 2;
                             box.pos.Y -= depthY / 2;
+                            
+                            this.vel.Y += (depthY * this.elasticity * box.elasticity) / 2;
+                            box.vel.Y -= (depthY * this.elasticity * box.elasticity) / 2;
                         }else
                         {
                             this.pos.Y -= depthY / 2;
                             box.pos.Y += depthY / 2;
+
+                            this.vel.Y -= (depthY * this.elasticity * box.elasticity) / 2;
+                            box.vel.Y += (depthY * this.elasticity * box.elasticity) / 2;
                         }
                     }
                 }
@@ -129,9 +154,9 @@ namespace Radius2D
             Raylib.DrawRectangle((int)this.pos.X, (int)this.pos.Y, (int)this.width, (int)this.height, this.shade);
         }
 
-        public void drawBoxC()
+        public void drawBoxLine()
         {
-            Raylib.DrawRectangle((int)this.pos.X, (int)this.pos.Y, (int)this.width, (int)this.height, Color.WHITE);
+            Raylib.DrawRectangleLines((int)this.pos.X, (int)this.pos.Y, (int)this.width, (int)this.height, Color.WHITE);
         }
     }
 }
