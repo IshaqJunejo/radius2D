@@ -28,12 +28,10 @@ namespace Radius2D
             Layer.lines.Add(line04);
 
             // Adding AABB's to Physics Layer
-            List<AABB> boxes = new List<AABB>(0);
-
-            for (var i = 0; i < 500; i++)
+            for (var i = 0; i < 100; i++)
             {
-                AABB newBox = new AABB(Raylib.GetRandomValue(10, 1000), Raylib.GetRandomValue(10, 250), Raylib.GetRandomValue(5, 15), Raylib.GetRandomValue(5, 15), 1, Color.BROWN);
-                boxes.Add(newBox);
+                AABB newBox = new AABB(Raylib.GetRandomValue(10, 1000), Raylib.GetRandomValue(10, 250), Raylib.GetRandomValue(25, 75), Raylib.GetRandomValue(25, 75), 1, Color.BROWN);
+                Layer.boxes.Add(newBox);
             }
 
             // Some Extra Variables
@@ -52,19 +50,6 @@ namespace Radius2D
 
                 // Updating the Physics Layer
                 Layer.Update(deltaTime);
-
-                foreach (AABB box in boxes)
-                {
-                    box.Update(deltaTime);
-                }
-
-                foreach (AABB box in boxes)
-                {
-                    foreach (AABB BoundingBox in boxes)
-                    {
-                        box.CollisionResponseBox(BoundingBox, deltaTime);
-                    }
-                }
                 
                 // Rendering Section of the Program
                 Raylib.BeginDrawing();
@@ -76,12 +61,6 @@ namespace Radius2D
 
                     // Drawing the Physics Layer's every Element
                     Layer.Draw();
-
-                    foreach (AABB box in boxes)
-                    {
-                        //box.drawBox();
-                        box.drawBoxLine();
-                    }
                 
                 // End of Rendering section
                 Raylib.EndDrawing();

@@ -50,6 +50,28 @@ namespace Radius2D
             return true;
         }
 
+        // Method to calculate Collision between Bounding Box and Line
+        public static bool AABBToLine(AABB box, Line wall)
+        {
+            float left = Math.Max(box.pos.X, Math.Min(wall.p.X, wall.q.X));
+            float right = Math.Min(box.pos.X, Math.Max(wall.p.X, wall.q.X));
+            float top = Math.Max(box.pos.Y, Math.Min(wall.p.Y, wall.q.Y));
+            float bottom = Math.Min(box.pos.Y, Math.Max(wall.p.Y, wall.q.Y));
+
+            if (left > right || top > bottom)
+            {
+                return false;
+            }
+
+            // calculating the point of intersection
+            /*float u1 = ((left - wall.p.X) * (wall.q.Y - wall.p.Y) - (top - wall.p.Y) * (wall.q.X - wall.p.X)) / (float)(Math.Pow((wall.q.X - wall.p.X), 2) + Math.Pow((wall.q.Y - wall.p.Y), 2));
+            if (u1 > 1 || u1 < 0)
+            {
+                return false;
+            }*/
+            return true;
+        }
+
         // Method to calculate Collision between Ball/Circle and Line
         public static float CircleToLine(Line l, Circle circ)
         {

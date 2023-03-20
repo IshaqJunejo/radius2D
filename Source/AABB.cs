@@ -38,7 +38,7 @@ namespace Radius2D
 
         public void Update(float deltaTime)
         {
-            float terminalVel = 7.5f;
+            float terminalVel = 2.5f;
             this.force.Y += 0.1f * this.mass;
             this.vel += this.force * this.inverseMass * deltaTime * 60;
 
