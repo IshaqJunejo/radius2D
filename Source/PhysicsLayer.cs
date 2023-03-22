@@ -43,6 +43,11 @@ namespace Radius2D
                 {
                     box.CollisionResponseBox(boundBox, deltaTime);
                 }
+
+                foreach (Circle circ in this.circles)
+                {
+                    box.CollisionResponseCircle(circ, deltaTime);
+                }
             }
 
             // Iterating through springs for updating them
@@ -58,6 +63,7 @@ namespace Radius2D
             foreach (Circle circle in this.circles)
             {
                 circle.Draw();
+                Raylib_cs.Raylib.DrawCircle((int)circle.pos.X, (int)circle.pos.Y, 2, Raylib_cs.Color.WHITE);
             }
 
             // Iterating through boxes for rendering them

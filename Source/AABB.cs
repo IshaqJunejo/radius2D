@@ -13,7 +13,7 @@ namespace Radius2D
         public float mass;
         public float elasticity;
         public float inverseMass;
-        private Color shade;
+        public Color shade;
 
         public AABB(float posX, float posY, float Width, float Height, float Mass, Color color)
         {
@@ -38,7 +38,7 @@ namespace Radius2D
 
         public void Update(float deltaTime)
         {
-            float terminalVel = 2.5f;
+            float terminalVel = 7.5f;
             this.force.Y += 0.1f * this.mass;
             this.vel += this.force * this.inverseMass * deltaTime * 60;
 
@@ -97,15 +97,15 @@ namespace Radius2D
                             this.pos.X += depthX / 2;
                             box.pos.X -= depthX / 2;
 
-                            this.vel.X += (depthX * this.elasticity * box.elasticity) / 2;
-                            box.vel.X -= (depthX * this.elasticity * box.elasticity) / 2;
+                            this.vel.X += (depthX * this.elasticity * box.elasticity) * this.inverseMass / (this.inverseMass + box.inverseMass);
+                            box.vel.X -= (depthX * this.elasticity * box.elasticity) * box.inverseMass / (this.inverseMass + box.inverseMass);
                         }else
                         {
                             this.pos.X -= depthX / 2;
                             box.pos.X += depthX / 2;
 
-                            this.vel.X -= (depthX * this.elasticity * box.elasticity) / 2;
-                            box.vel.X += (depthX * this.elasticity * box.elasticity) / 2;
+                            this.vel.X -= (depthX * this.elasticity * box.elasticity) * this.inverseMass / (this.inverseMass + box.inverseMass);
+                            box.vel.X += (depthX * this.elasticity * box.elasticity) * box.inverseMass / (this.inverseMass + box.inverseMass);
                         }
                     }else
                     {
@@ -114,18 +114,35 @@ namespace Radius2D
                             this.pos.Y += depthY / 2;
                             box.pos.Y -= depthY / 2;
                             
-                            this.vel.Y += (depthY * this.elasticity * box.elasticity) / 2;
-                            box.vel.Y -= (depthY * this.elasticity * box.elasticity) / 2;
+                            this.vel.Y += (depthY * this.elasticity * box.elasticity) * this.inverseMass / (this.inverseMass + box.inverseMass);
+                            box.vel.Y -= (depthY * this.elasticity * box.elasticity) * box.inverseMass / (this.inverseMass + box.inverseMass);
                         }else
                         {
                             this.pos.Y -= depthY / 2;
                             box.pos.Y += depthY / 2;
 
-                            this.vel.Y -= (depthY * this.elasticity * box.elasticity) / 2;
-                            box.vel.Y += (depthY * this.elasticity * box.elasticity) / 2;
+                            this.vel.Y -= (depthY * this.elasticity * box.elasticity) * this.inverseMass / (this.inverseMass + box.inverseMass);
+                            box.vel.Y += (depthY * this.elasticity * box.elasticity) * box.inverseMass / (this.inverseMass + box.inverseMass);
                         }
                     }
                 }
+            }
+        }
+
+        public void CollisionResponseCircle(Circle circ, float deltaTime)
+        {
+            Vector2 closestPoint = Collision.ClosestPointBoxToCircle(this, circ);
+
+            float distance = (float)Math.Sqrt((closestPoint.X - circ.pos.X) * (closestPoint.X - circ.pos.X) + (closestPoint.Y - circ.pos.Y) * (closestPoint.Y - circ.pos.Y));
+
+            if (distance <= circ.radius && distance != 0.0f)
+            {
+                float overlap = circ.radius - distance;
+
+                Vector2 overlapVector = new Vector2((circ.pos.X - closestPoint.X) / distance, (circ.pos.Y - closestPoint.Y) / distance);
+
+                this.pos -= overlapVector * overlap * deltaTime * 60 / 2;
+                circ.pos += overlapVector * overlap * deltaTime * 60 / 2;
             }
         }
 

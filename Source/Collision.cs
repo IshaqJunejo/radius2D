@@ -50,6 +50,35 @@ namespace Radius2D
             return true;
         }
 
+        public static Vector2 ClosestPointBoxToCircle(AABB box, Circle circ)
+        {
+            float closestPointX, closestPointY;
+
+            if (circ.pos.X < box.getEdgeXMin())
+            {
+                closestPointX = box.getEdgeXMin();
+            }else if (circ.pos.X > box.getEdgeXMax())
+            {
+                closestPointX = box.getEdgeXMax();
+            }else
+            {
+                closestPointX = circ.pos.X;
+            }
+
+            if (circ.pos.Y < box.getEdgeYMin())
+            {
+                closestPointY = box.getEdgeYMin();
+            }else if (circ.pos.Y > box.getEdgeYMax())
+            {
+                closestPointY = box.getEdgeYMax();
+            }else
+            {
+                closestPointY = circ.pos.Y;
+            }
+
+            return new Vector2(closestPointX, closestPointY);
+        }
+
         // Method to calculate Collision between Bounding Box and Line
         public static bool AABBToLine(AABB box, Line wall)
         {
