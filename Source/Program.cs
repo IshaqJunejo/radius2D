@@ -30,13 +30,13 @@ namespace Radius2D
             // Adding AABB's to Physics Layer
             for (var i = 0; i < 30; i++)
             {
-                AABB newBox = new AABB(Raylib.GetRandomValue(10, 1000), Raylib.GetRandomValue(10, 250), Raylib.GetRandomValue(25, 75), Raylib.GetRandomValue(25, 75), Raylib.GetRandomValue(1, 15), Color.BROWN);
+                var newBox = new AABB(Raylib.GetRandomValue(10, 1000), Raylib.GetRandomValue(10, 250), Raylib.GetRandomValue(25, 75), Raylib.GetRandomValue(25, 75), Raylib.GetRandomValue(1, 15), Color.BROWN);
                 Layer.boxes.Add(newBox);
             }
 
             for (var i = 0; i < 5; i++)
             {
-                Circle newCirc = new Circle(Raylib.GetRandomValue(10, 1000), Raylib.GetRandomValue(10, 250), 0, 0, Raylib.GetRandomValue(15, 35), Raylib.GetRandomValue(5, 15), 0.5f, Color.BROWN);
+                var newCirc = new Circle(Raylib.GetRandomValue(10, 1000), Raylib.GetRandomValue(10, 250), 0, 0, Raylib.GetRandomValue(15, 35), Raylib.GetRandomValue(5, 15), 0.5f, Color.BROWN);
                 Layer.circles.Add(newCirc);
             }
 

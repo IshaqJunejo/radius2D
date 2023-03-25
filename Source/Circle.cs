@@ -146,6 +146,23 @@ namespace Radius2D
                 }
             }
         }
+
+        public void CollisionResponseBox(AABB box, float deltaTime)
+        {
+            Vector2 closestPoint = Collision.ClosestPointBoxToCircle(box, this);
+
+            float distance = (float)Math.Sqrt((closestPoint.X - this.pos.X) * (closestPoint.X - this.pos.X) + (closestPoint.Y - this.pos.Y) * (closestPoint.Y - this.pos.Y));
+
+            if (distance <= this.radius && distance != 0.0f)
+            {
+                float overlap = this.radius - distance;
+
+                Vector2 overlapVector = new Vector2((this.pos.X - closestPoint.X) / distance, (this.pos.Y - closestPoint.Y) / distance);
+
+                box.pos -= overlapVector * overlap * deltaTime * 60 / 2;
+                this.pos += overlapVector * overlap * deltaTime * 60 / 2;
+            }
+        }
         
         // Method to draw the Balls/Circles
         public void Draw()

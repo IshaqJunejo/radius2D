@@ -27,6 +27,10 @@ namespace Radius2D
                 {
                     circle.CollisionResponseCircle(circ, deltaTime);
                 }
+                foreach (AABB box in this.boxes)
+                {
+                    circle.CollisionResponseBox(box, deltaTime);
+                }
                 foreach (Line line in this.lines)
                 {
                     circle.CollisionResponseLine(line, deltaTime);
