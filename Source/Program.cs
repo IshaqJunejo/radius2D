@@ -40,6 +40,8 @@ namespace Radius2D
                 Layer.circles.Add(newCirc);
             }
 
+            var box = new Polygon(120, 210, 6, 35);
+
             // Some Extra Variables
             float FPS;
             float deltaTime;
@@ -67,6 +69,8 @@ namespace Radius2D
 
                     // Drawing the Physics Layer's every Element
                     Layer.Draw();
+
+                    box.Draw();
                 
                 // End of Rendering section
                 Raylib.EndDrawing();
