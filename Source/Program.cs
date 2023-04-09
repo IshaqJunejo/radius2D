@@ -40,7 +40,8 @@ namespace Radius2D
                 Layer.circles.Add(newCirc);
             }
 
-            var box = new Polygon(120, 210, 6, 35);
+            var box = new Polygon(120, 210, 5, 35, true);
+            var Anotherbox = new Polygon(250, 320, 3, 35, false);
 
             // Some Extra Variables
             float FPS;
@@ -57,7 +58,16 @@ namespace Radius2D
                 deltaTime = Raylib.GetFrameTime();
 
                 // Updating the Physics Layer
-                Layer.Update(deltaTime);
+                //Layer.Update(deltaTime);
+
+                box.Update(deltaTime);
+                Anotherbox.Update(deltaTime);
+
+                if (Collision.PolygonToPolygon(box, Anotherbox))
+                {
+                    box.overlap = true;
+                    Anotherbox.overlap = true;
+                }
                 
                 // Rendering Section of the Program
                 Raylib.BeginDrawing();
@@ -68,9 +78,17 @@ namespace Radius2D
                     Raylib.DrawText(fpsText, 20, 20, 20, Color.RAYWHITE);
 
                     // Drawing the Physics Layer's every Element
-                    Layer.Draw();
+                    //Layer.Draw();
 
-                    box.Draw();
+                    if (!box.overlap)
+                    {                
+                        box.Draw(Color.WHITE);
+                        Anotherbox.Draw(Color.WHITE);
+                    }else
+                    {
+                        box.Draw(Color.RED);
+                        Anotherbox.Draw(Color.RED);
+                    }
                 
                 // End of Rendering section
                 Raylib.EndDrawing();
