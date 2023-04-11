@@ -15,27 +15,39 @@ namespace Radius2D
         public Vector2 force;
         public float mass;
         public float inverseMass;*/
+
+        // Constructor
         public Polygon(float centerX, float centerY, int NumOfVertices, float radie, bool isItPlayer)
         {
             this.centrePos = new Vector2(centerX, centerY);
+
+            // Setting Up Reference Positions
             this.ReferencePositions = new Vector2[NumOfVertices];
             for (var i = 0; i < NumOfVertices; i++)
             {
                 this.ReferencePositions[i] = new Vector2((float)Math.Cos(2 * Math.PI / NumOfVertices * i) * radie, (float)Math.Sin(2 * Math.PI / NumOfVertices * i) * radie);
             }
+            // Angle
             this.angle = (float) (Math.PI / -2.0);
+
+            // Setting Up Updated Positions
             this.UpdatedPositions = new Vector2[NumOfVertices];
             for (var i = 0; i < NumOfVertices; i++)
             {
                 this.UpdatedPositions[i] = new Vector2(centrePos.X + ReferencePositions[i].X, centrePos.Y + ReferencePositions[i].Y);
             }
 
+            // Player Flag
             this.player = isItPlayer;
         }
 
+        // Update Function
         public void Update(float deltaTime)
         {
+            // Updating Overlap flag
             overlap = false;
+
+            // Keyboard Inputs to move the polygons
             if (Raylib.IsKeyDown(KeyboardKey.KEY_LEFT) && this.player)
             {
                 this.angle -= 0.75f * deltaTime;
@@ -56,26 +68,6 @@ namespace Radius2D
                 this.centrePos.Y -= (float) Math.Sin(this.angle) * 2.0f;
             }
 
-            if (Raylib.IsKeyDown(KeyboardKey.KEY_A) && this.player == false)
-            {
-                this.angle -= 0.75f * deltaTime;
-            }
-            else if (Raylib.IsKeyDown(KeyboardKey.KEY_D) && this.player == false)
-            {
-                this.angle += 0.75f * deltaTime;
-            }
-
-            if (Raylib.IsKeyDown(KeyboardKey.KEY_W) && this.player == false)
-            {
-                this.centrePos.X += (float) Math.Cos(this.angle) * 2.0f;
-                this.centrePos.Y += (float) Math.Sin(this.angle) * 2.0f;
-            }
-            else if (Raylib.IsKeyDown(KeyboardKey.KEY_S) && this.player == false)
-            {
-                this.centrePos.X -= (float) Math.Cos(this.angle) * 2.0f;
-                this.centrePos.Y -= (float) Math.Sin(this.angle) * 2.0f;
-            }
-
             // Updating Position using Rotation Transform Matrix
             for (var i = 0; i < this.UpdatedPositions.Length; i++)
             {
@@ -84,9 +76,12 @@ namespace Radius2D
             }
         }
 
+        // Draw Method
         public void Draw(Color color)
         {
+            // Draw Line from Centre to Vertex
             Raylib.DrawLine((int)this.centrePos.X, (int)this.centrePos.Y, (int)(this.UpdatedPositions[0].X), (int)(this.UpdatedPositions[0].Y), color);
+            // Drawing Lines from Vertex to Vertex
             for (var i = 0; i < this.ReferencePositions.Length; i++)
             {
                 Raylib.DrawLine((int)(this.UpdatedPositions[i].X), (int)(this.UpdatedPositions[i].Y), (int)(this.UpdatedPositions[(i+1) % this.UpdatedPositions.Length].X), (int)(this.UpdatedPositions[(i+1) % this.UpdatedPositions.Length].Y), color);

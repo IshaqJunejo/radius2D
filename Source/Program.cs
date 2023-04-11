@@ -40,8 +40,21 @@ namespace Radius2D
                 Layer.circles.Add(newCirc);
             }
 
-            var box = new Polygon(120, 210, 5, 35, true);
-            var Anotherbox = new Polygon(250, 320, 3, 35, false);
+            List<Polygon> polygones = new List<Polygon>(0);
+            for (var i = 0; i < 50; i++)
+            {
+                bool playerFlag;
+                if (Raylib.GetRandomValue(0, 1) == 0)
+                {
+                    playerFlag = false;
+                }else
+                {
+                    playerFlag = true;
+                }
+                var box = new Polygon(Raylib.GetRandomValue(30, 1020), Raylib.GetRandomValue(30, 920), Raylib.GetRandomValue(3, 8), Raylib.GetRandomValue(12, 30), playerFlag);
+                box.angle = Raylib.GetRandomValue(-10, 10);
+                polygones.Add(box);
+            }
 
             // Some Extra Variables
             float FPS;
@@ -60,13 +73,17 @@ namespace Radius2D
                 // Updating the Physics Layer
                 //Layer.Update(deltaTime);
 
-                box.Update(deltaTime);
-                Anotherbox.Update(deltaTime);
-
-                if (Collision.PolygonToPolygon(box, Anotherbox))
+                foreach (var box in polygones)
                 {
-                    box.overlap = true;
-                    Anotherbox.overlap = true;
+                    box.Update(deltaTime);
+                    foreach (var boxe in polygones)
+                    {
+                        if (box != boxe && Collision.PolygonToPolygon(box, boxe))
+                        {
+                            box.overlap = true;
+                            box.overlap = true;
+                        }
+                    }
                 }
                 
                 // Rendering Section of the Program
@@ -80,14 +97,15 @@ namespace Radius2D
                     // Drawing the Physics Layer's every Element
                     //Layer.Draw();
 
-                    if (!box.overlap)
-                    {                
-                        box.Draw(Color.WHITE);
-                        Anotherbox.Draw(Color.WHITE);
-                    }else
+                    foreach (var box in polygones)
                     {
-                        box.Draw(Color.RED);
-                        Anotherbox.Draw(Color.RED);
+                        if (!box.overlap)
+                        {
+                            box.Draw(Color.WHITE);
+                        }else
+                        {
+                            box.Draw(Color.RED);
+                        }
                     }
                 
                 // End of Rendering section
