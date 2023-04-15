@@ -76,6 +76,21 @@ namespace Radius2D
             }
         }
 
+        public void CollisionResponsePolygon(Polygon poly, float deltaTime)
+        {
+            if (this != poly)
+            {
+                if (Collision.PolygonToPolygon(this, poly) > 0.0f)
+                {
+                    Vector2 d = poly.centrePos - this.centrePos;
+                    float magnitude = (float)Math.Sqrt(d.X * d.X + d.Y * d.Y);
+
+                    this.centrePos -= Collision.PolygonToPolygon(this, poly) * d / magnitude / 2 * deltaTime * 60;
+                    poly.centrePos += Collision.PolygonToPolygon(this, poly) * d / magnitude / 2 * deltaTime * 60;
+                }
+            }
+        }
+
         // Draw Method
         public void Draw(Color color)
         {

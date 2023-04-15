@@ -142,10 +142,12 @@ namespace Radius2D
             return false;
         }
 
-        public static bool PolygonToPolygon(Polygon poly01, Polygon poly02)
+        public static float PolygonToPolygon(Polygon poly01, Polygon poly02)
         {
             Polygon shape01 = poly01;
             Polygon shape02 = poly02;
+
+            float overlap = (float) double.PositiveInfinity;
 
             for (var shape = 0; shape < 2; shape++)
             {
@@ -182,13 +184,15 @@ namespace Radius2D
                         max2 = Math.Max(max2, dotProduct);
                     }
 
+                    overlap = (float) Math.Min(Math.Min(max1, max2) - Math.Max(min1, min2), overlap);
+
                     if (!(max2 >= min1 && min1 <= max2))
                     {
-                        return false;
+                        return -1;
                     }
                 }
             }
-            return true;
+            return overlap;
         }
 
         public static float RadToDeg(float rad)

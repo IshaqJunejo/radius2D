@@ -78,11 +78,13 @@ namespace Radius2D
                     box.Update(deltaTime);
                     foreach (var boxe in polygones)
                     {
-                        if (box != boxe && Collision.PolygonToPolygon(box, boxe))
+                        if (box != boxe && Collision.PolygonToPolygon(box, boxe) > 0.0f)
                         {
                             box.overlap = true;
                             box.overlap = true;
                         }
+
+                        box.CollisionResponsePolygon(boxe, deltaTime);
                     }
                 }
                 
