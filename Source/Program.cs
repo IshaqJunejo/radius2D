@@ -40,6 +40,22 @@ namespace Radius2D
                 Layer.circles.Add(newCirc);
             }
 
+            List<Polygon> polygones = new List<Polygon>(0);
+            for (var i = 0; i < 50; i++)
+            {
+                bool playerFlag;
+                if (Raylib.GetRandomValue(0, 1) == 0)
+                {
+                    playerFlag = false;
+                }else
+                {
+                    playerFlag = true;
+                }
+                var box = new Polygon(Raylib.GetRandomValue(30, 1020), Raylib.GetRandomValue(30, 920), Raylib.GetRandomValue(3, 8), Raylib.GetRandomValue(12, 30), playerFlag);
+                box.angle = Raylib.GetRandomValue(-10, 10);
+                polygones.Add(box);
+            }
+
             // Some Extra Variables
             float FPS;
             float deltaTime;
@@ -55,7 +71,22 @@ namespace Radius2D
                 deltaTime = Raylib.GetFrameTime();
 
                 // Updating the Physics Layer
-                Layer.Update(deltaTime);
+                //Layer.Update(deltaTime);
+
+                foreach (var box in polygones)
+                {
+                    box.Update(deltaTime);
+                    foreach (var boxe in polygones)
+                    {
+                        if (box != boxe && Collision.PolygonToPolygon(box, boxe) > 0.0f)
+                        {
+                            box.overlap = true;
+                            box.overlap = true;
+                        }
+
+                        box.CollisionResponsePolygon(boxe, deltaTime);
+                    }
+                }
                 
                 // Rendering Section of the Program
                 Raylib.BeginDrawing();
@@ -66,7 +97,18 @@ namespace Radius2D
                     Raylib.DrawText(fpsText, 20, 20, 20, Color.RAYWHITE);
 
                     // Drawing the Physics Layer's every Element
-                    Layer.Draw();
+                    //Layer.Draw();
+
+                    foreach (var box in polygones)
+                    {
+                        if (!box.overlap)
+                        {
+                            box.Draw(Color.WHITE);
+                        }else
+                        {
+                            box.Draw(Color.RED);
+                        }
+                    }
                 
                 // End of Rendering section
                 Raylib.EndDrawing();
