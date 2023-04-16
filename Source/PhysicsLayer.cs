@@ -4,17 +4,21 @@ namespace Radius2D
     {
         public List<Circle> circles;
         public List<AABB> boxes;
+        public List<Polygon> polygons;
         public List<Line> lines;
         public List<Spring> springs;
 
+        // Constructor
         public PhysicsLayer()
         {
             circles = new List<Circle>(0);
             boxes = new List<AABB>(0);
+            polygons = new List<Polygon>(0);
             lines = new List<Line>(0);
             springs = new List<Spring>(0);
         }
 
+        // Method to Update the Physics Layers
         public void Update(float deltaTime)
         {
             // Iterating through the list of Circles
@@ -54,6 +58,18 @@ namespace Radius2D
                 }
             }
 
+            // Iterating through Polygons for updating them
+            foreach (var box in this.polygons)
+            {
+                // Updating the Polygons
+                box.Update(deltaTime);
+                // Checking for Collisions
+                foreach (var poly in this.polygons)
+                {
+                    box.CollisionResponsePolygon(poly, deltaTime);
+                }
+            }
+
             // Iterating through springs for updating them
             foreach (Spring spring in this.springs)
             {
@@ -61,6 +77,7 @@ namespace Radius2D
             }
         }
 
+        // Method to Render the Layer
         public void Draw()
         {
             // Iterating through circle for rendering them
@@ -81,6 +98,12 @@ namespace Radius2D
             foreach (Line line in this.lines)
             {
                 line.Draw();
+            }
+
+            // Iterating through Polygons for rendering them
+            foreach (var box in this.polygons)
+            {
+                box.Draw();
             }
 
             // Iterating through springs for rendering them

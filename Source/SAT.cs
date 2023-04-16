@@ -10,7 +10,6 @@ namespace Radius2D
         public float angle;
         public Vector2[] UpdatedPositions;
         private bool player;
-        public bool overlap;
         /*public Vector2 vel;
         public Vector2 force;
         public float mass;
@@ -44,9 +43,6 @@ namespace Radius2D
         // Update Function
         public void Update(float deltaTime)
         {
-            // Updating Overlap flag
-            overlap = false;
-
             // Keyboard Inputs to move the polygons
             if (Raylib.IsKeyDown(KeyboardKey.KEY_LEFT) && this.player)
             {
@@ -76,6 +72,7 @@ namespace Radius2D
             }
         }
 
+        // Method for Responding to Collisions
         public void CollisionResponsePolygon(Polygon poly, float deltaTime)
         {
             if (this != poly)
@@ -92,14 +89,14 @@ namespace Radius2D
         }
 
         // Draw Method
-        public void Draw(Color color)
+        public void Draw()
         {
             // Draw Line from Centre to Vertex
-            Raylib.DrawLine((int)this.centrePos.X, (int)this.centrePos.Y, (int)(this.UpdatedPositions[0].X), (int)(this.UpdatedPositions[0].Y), color);
+            Raylib.DrawLine((int)this.centrePos.X, (int)this.centrePos.Y, (int)(this.UpdatedPositions[0].X), (int)(this.UpdatedPositions[0].Y), Color.WHITE);
             // Drawing Lines from Vertex to Vertex
             for (var i = 0; i < this.ReferencePositions.Length; i++)
             {
-                Raylib.DrawLine((int)(this.UpdatedPositions[i].X), (int)(this.UpdatedPositions[i].Y), (int)(this.UpdatedPositions[(i+1) % this.UpdatedPositions.Length].X), (int)(this.UpdatedPositions[(i+1) % this.UpdatedPositions.Length].Y), color);
+                Raylib.DrawLine((int)(this.UpdatedPositions[i].X), (int)(this.UpdatedPositions[i].Y), (int)(this.UpdatedPositions[(i+1) % this.UpdatedPositions.Length].X), (int)(this.UpdatedPositions[(i+1) % this.UpdatedPositions.Length].Y), Color.WHITE);
             }
         }
     }
