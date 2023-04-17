@@ -10,13 +10,13 @@ namespace Radius2D
         public float angle;
         public Vector2[] UpdatedPositions;
         private bool player;
-        /*public Vector2 vel;
+        public Vector2 vel;
         public Vector2 force;
         public float mass;
-        public float inverseMass;*/
+        public float inverseMass;
 
         // Constructor
-        public Polygon(float centerX, float centerY, int NumOfVertices, float radie, bool isItPlayer)
+        public Polygon(float centerX, float centerY, int NumOfVertices, float radie, float mass, bool isItPlayer)
         {
             this.centrePos = new Vector2(centerX, centerY);
 
@@ -36,6 +36,15 @@ namespace Radius2D
                 this.UpdatedPositions[i] = new Vector2(centrePos.X + ReferencePositions[i].X, centrePos.Y + ReferencePositions[i].Y);
             }
 
+            this.mass = mass;
+            if (mass == 0.0f)
+            {
+                this.inverseMass = 0.0f;
+            }else
+            {
+                this.inverseMass = 1 / mass;
+            }
+
             // Player Flag
             this.player = isItPlayer;
         }
@@ -43,6 +52,33 @@ namespace Radius2D
         // Update Function
         public void Update(float deltaTime)
         {
+            // Initializing Terminal(Maximum) Velocity
+            float terminalVel = 7.5f;
+
+            // Gravity
+            this.force.Y += 0.1f * this.mass;
+
+            // Updating Velocity using Force
+            this.vel += this.force * this.inverseMass * deltaTime * 60;
+
+             // Checking if Horizontal Velocity is in the Terminal Velocity
+            if (this.vel.X >= terminalVel)
+            {
+                this.vel.X = terminalVel;
+            }else if (this.vel.X < -terminalVel)
+            {
+                this.vel.X = -terminalVel;
+            };
+
+            // Checking if Vertical Velocity is in the Terminal Velocity
+            if (this.vel.Y >= terminalVel)
+            {
+                this.vel.Y = terminalVel;
+            }else if (this.vel.Y < -terminalVel)
+            {
+                this.vel.Y = -terminalVel;
+            };
+
             // Keyboard Inputs to move the polygons
             if (Raylib.IsKeyDown(KeyboardKey.KEY_LEFT) && this.player)
             {
@@ -70,6 +106,9 @@ namespace Radius2D
                 this.UpdatedPositions[i].X = (this.ReferencePositions[i].X * (float)Math.Cos(this.angle)) - (this.ReferencePositions[i].Y * (float)Math.Sin(this.angle)) + this.centrePos.X;
                 this.UpdatedPositions[i].Y = (this.ReferencePositions[i].X * (float)Math.Sin(this.angle)) + (this.ReferencePositions[i].Y * (float)Math.Cos(this.angle)) + this.centrePos.Y;
             }
+
+            this.centrePos += this.vel * deltaTime * 60;
+            this.force = new Vector2(0, 0);
         }
 
         // Method for Responding to Collisions

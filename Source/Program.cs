@@ -45,7 +45,7 @@ namespace Radius2D
                 {
                     playerFlag = true;
                 }
-                var box = new Polygon(Raylib.GetRandomValue(30, 1020), Raylib.GetRandomValue(30, 920), Raylib.GetRandomValue(3, 8), Raylib.GetRandomValue(12, 30), playerFlag);
+                var box = new Polygon(Raylib.GetRandomValue(30, 1020), Raylib.GetRandomValue(30, 920), Raylib.GetRandomValue(3, 8), Raylib.GetRandomValue(12, 30), 1.0f, playerFlag);
                 box.angle = Raylib.GetRandomValue(-10, 10);
                 Layer.polygons.Add(box);
             }
