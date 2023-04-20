@@ -28,22 +28,8 @@ Install the [MIJGames.Radius2D](https://www.nuget.org/packages/MIJGames.Radius2D
     </a>
 </p>
 
-#### Cloth Simulation
-
-This is a sample simulation of Radius2D,
-
-This Cloth Simulation is made by having few Circles ( with radius 0 ) being placed and connected with springs. Which is why it is not a normal cloth simulation but an Elastic Cloth Simulation.
-
-It also have Mouse inputs for Simulating Wind Effects,
-
-- Hold Left Mouse Button for Wind to blow from Left.
-- Hold Right Mouse Button for Wind to blow from Right.
-
-#### Soft Body Simulation
-
-This is also a sample simulation of Radius2D,
-
-This simply is a Soft Body Simulation having a Circle in the center and few more Circles around that and all the circles are connected through Springs which gives it Soft Body Effect.
+ - Cloth Simulation
+ - Soft Body Simulation
 
 ## How to Use
 
