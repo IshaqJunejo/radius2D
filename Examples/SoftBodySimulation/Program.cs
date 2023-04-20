@@ -34,12 +34,14 @@ namespace SoftBodySimulation
 
             // Initializing the List of Balls/Circles
             int numOfCircs = 10;
-            float radie = 50;
+            float radie = 50.0f;
+            float springStrength = 3.0f;
+            float radiusOfCircs = 10.0f;
             var centerOfCirc = new Circle(700, 150, 0, 0, 15, 20, 0.8f, Color.GRAY);
             layer.circles.Add(centerOfCirc);
             for (float i = 0; i < 360; i += 360 / numOfCircs)
             {
-                var newCirc = new Circle(700 + (float)((Math.Cos(i * Math.PI / 180)) * radie), 150 + (float)((Math.Sin(i * Math.PI / 180)) * radie), 0, 0, 10, 20, 0.8f, Color.WHITE);
+                var newCirc = new Circle(700 + (float)((Math.Cos(i * Math.PI / 180)) * radie), 150 + (float)((Math.Sin(i * Math.PI / 180)) * radie), 0, 0, radiusOfCircs, 20, 0.8f, Color.WHITE);
                 layer.circles.Add(newCirc);
             }
 
@@ -50,11 +52,11 @@ namespace SoftBodySimulation
                 layer.springs.Add(newLink);
                 if (i != 0)
                 {
-                    var internalLink = new Spring(layer.circles[i], layer.circles[i + 1], (radie * 2.0f * (float) Math.PI) / numOfCircs, 3.0f, 1.0f);
+                    var internalLink = new Spring(layer.circles[i], layer.circles[i + 1], (radie * 2.0f * (float) Math.PI) / numOfCircs, springStrength, springStrength / 3.0f);
                     layer.springs.Add(internalLink);
                 }
             }
-            var extraLink = new Spring(layer.circles[1], layer.circles[numOfCircs], (radie * 2.0f * (float) Math.PI) / numOfCircs, 3.0f, 1.0f);
+            var extraLink = new Spring(layer.circles[1], layer.circles[numOfCircs], (radie * 2.0f * (float) Math.PI) / numOfCircs, springStrength, springStrength / 3.0f);
             layer.springs.Add(extraLink);
 
             // Some Extra Variables
