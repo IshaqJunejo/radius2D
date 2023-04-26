@@ -127,6 +127,18 @@ namespace Radius2D
             }
         }
 
+        public void CollisionResponseCircle(Circle circ, float deltaTime)
+        {
+            if (Collision.PolygonToCircle(this, circ) > 0.0f)
+            {
+                Vector2 d = circ.pos - this.centrePos;
+                float magnitude = (float)Math.Sqrt(d.X * d.X + d.Y * d.Y);
+
+                this.centrePos -= Collision.PolygonToCircle(this, circ) * d / magnitude / 2 * deltaTime * 60;
+                circ.pos += Collision.PolygonToCircle(this, circ) * d / magnitude / 2 * deltaTime * 60;
+            }
+        }
+
         // Draw Method
         public void Draw()
         {

@@ -68,6 +68,10 @@ namespace Radius2D
                 {
                     box.CollisionResponsePolygon(poly, deltaTime);
                 }
+                foreach (var circ in this.circles)
+                {
+                    box.CollisionResponseCircle(circ, deltaTime);
+                }
             }
 
             // Iterating through springs for updating them
