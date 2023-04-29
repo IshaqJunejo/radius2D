@@ -14,6 +14,7 @@ namespace Radius2D
         public Vector2 force;
         public float mass;
         public float inverseMass;
+        public float elasticity;
 
         // Constructor
         public Polygon(float centerX, float centerY, int NumOfVertices, float radie, float mass, bool isItPlayer)
@@ -47,6 +48,7 @@ namespace Radius2D
 
             // Player Flag
             this.player = isItPlayer;
+            this.elasticity = 0.8f;
         }
 
         // Update Function
@@ -79,27 +81,6 @@ namespace Radius2D
                 this.vel.Y = -terminalVel;
             };
 
-            // Keyboard Inputs to move the polygons
-            if (Raylib.IsKeyDown(KeyboardKey.KEY_LEFT) && this.player)
-            {
-                this.angle -= 0.75f * deltaTime;
-            }
-            else if (Raylib.IsKeyDown(KeyboardKey.KEY_RIGHT) && this.player)
-            {
-                this.angle += 0.75f * deltaTime;
-            }
-
-            if (Raylib.IsKeyDown(KeyboardKey.KEY_UP) && this.player)
-            {
-                this.centrePos.X += (float) Math.Cos(this.angle) * 2.0f;
-                this.centrePos.Y += (float) Math.Sin(this.angle) * 2.0f;
-            }
-            else if (Raylib.IsKeyDown(KeyboardKey.KEY_DOWN) && this.player)
-            {
-                this.centrePos.X -= (float) Math.Cos(this.angle) * 2.0f;
-                this.centrePos.Y -= (float) Math.Sin(this.angle) * 2.0f;
-            }
-
             // Updating Position using Rotation Transform Matrix
             for (var i = 0; i < this.UpdatedPositions.Length; i++)
             {
@@ -118,11 +99,28 @@ namespace Radius2D
             {
                 if (Collision.PolygonToPolygon(this, poly) > 0.0f)
                 {
+                    // Executing Penetration
                     Vector2 d = poly.centrePos - this.centrePos;
                     float magnitude = (float)Math.Sqrt(d.X * d.X + d.Y * d.Y);
+                    Vector2 normal = d / magnitude;
 
-                    this.centrePos -= Collision.PolygonToPolygon(this, poly) * d / magnitude / 2 * deltaTime * 60;
-                    poly.centrePos += Collision.PolygonToPolygon(this, poly) * d / magnitude / 2 * deltaTime * 60;
+                    this.centrePos -= Collision.PolygonToPolygon(this, poly) * normal / 2 * deltaTime * 60;
+                    poly.centrePos += Collision.PolygonToPolygon(this, poly) * normal / 2 * deltaTime * 60;
+
+                    // Calculating Repulsion
+                    float productOfElasticity = this.elasticity * poly.elasticity;
+                    float ratioOfMass = this.mass / poly.mass;
+                    Vector2 relativeVelocity = this.vel - poly.vel;
+                    float seperatingVelocity = Vector2.Dot(normal, relativeVelocity);
+                    float newSeperatingVelocity = seperatingVelocity * -1 * productOfElasticity;
+
+                    float seperatingVelocityDifference = newSeperatingVelocity - seperatingVelocity;
+                    float impulse = seperatingVelocityDifference / (this.inverseMass + poly.inverseMass);
+                    Vector2 impulseVector = impulse * normal;
+
+                    // Executing Repulsion
+                    this.vel += impulseVector * this.inverseMass * deltaTime * 60;
+                    poly.vel -= impulseVector * this.inverseMass * deltaTime * 60;
                 }
             }
         }
@@ -131,11 +129,28 @@ namespace Radius2D
         {
             if (Collision.PolygonToCircle(this, circ) > 0.0f)
             {
+                // Executing Penetration
                 Vector2 d = circ.pos - this.centrePos;
                 float magnitude = (float)Math.Sqrt(d.X * d.X + d.Y * d.Y);
+                Vector2 normal = d / magnitude;
 
                 this.centrePos -= Collision.PolygonToCircle(this, circ) * d / magnitude / 2 * deltaTime * 60;
                 circ.pos += Collision.PolygonToCircle(this, circ) * d / magnitude / 2 * deltaTime * 60;
+
+                // Calculating Repulsion
+                float productOfElasticity = this.elasticity * circ.elasticity;
+                float ratioOfMass = this.mass / circ.mass;
+                Vector2 relativeVelocity = this.vel - circ.vel;
+                float seperatingVelocity = Vector2.Dot(normal, relativeVelocity);
+                float newSeperatingVelocity = seperatingVelocity * -1 * productOfElasticity;
+
+                float seperatingVelocityDifference = newSeperatingVelocity - seperatingVelocity;
+                float impulse = seperatingVelocityDifference / (this.inverseMass + circ.inverseMass);
+                Vector2 impulseVector = impulse * normal;
+
+                // Executing Repulsion
+                this.vel += impulseVector * this.inverseMass * deltaTime * 60;
+                circ.vel -= impulseVector * circ.inverseMass * deltaTime * 60;
             }
         }
 
