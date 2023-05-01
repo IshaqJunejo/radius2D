@@ -142,6 +142,173 @@ namespace Radius2D
             return false;
         }
 
+        public static float PolygonToPolygon(Polygon poly01, Polygon poly02)
+        {
+            Polygon shape01 = poly01;
+            Polygon shape02 = poly02;
+
+            float overlap = (float) double.PositiveInfinity;
+
+            for (var shape = 0; shape < 2; shape++)
+            {
+                if (shape == 1)
+                {
+                    shape01 = poly02;
+                    shape02 = poly01;
+                }
+
+                for (var i = 0; i < shape01.UpdatedPositions.Length; i++)
+                {
+                    int b = (i + 1) % shape01.UpdatedPositions.Length;
+                    Vector2 axisProj = new Vector2(-(shape01.UpdatedPositions[b].Y - shape01.UpdatedPositions[i].Y), shape01.UpdatedPositions[b].X - shape01.UpdatedPositions[i].X);
+                    float dist = (float) Math.Sqrt(axisProj.X * axisProj.X + axisProj.Y * axisProj.Y);
+                    axisProj = new Vector2(axisProj.X / dist, axisProj.Y / dist);
+
+                    float min1 = (float) double.PositiveInfinity;
+                    float max1 = (float) double.NegativeInfinity;
+
+                    for (var j = 0; j < shape01.UpdatedPositions.Length; j++)
+                    {
+                        float dotProduct = (shape01.UpdatedPositions[j].X * axisProj.X + shape01.UpdatedPositions[j].Y * axisProj.Y);
+                        min1 = Math.Min(min1, dotProduct);
+                        max1 = Math.Max(max1, dotProduct);
+                    }
+
+                    float min2 = (float) double.PositiveInfinity;
+                    float max2 = (float) double.NegativeInfinity;
+
+                    for (var j = 0; j < shape02.UpdatedPositions.Length; j++)
+                    {
+                        float dotProduct = (shape02.UpdatedPositions[j].X * axisProj.X + shape02.UpdatedPositions[j].Y * axisProj.Y);
+                        min2 = Math.Min(min2, dotProduct);
+                        max2 = Math.Max(max2, dotProduct);
+                    }
+
+                    overlap = (float) Math.Min(Math.Min(max1, max2) - Math.Max(min1, min2), overlap);
+
+                    if (!(max2 >= min1 && min1 <= max2))
+                    {
+                        return -1;
+                    }
+                }
+            }
+            return overlap;
+        }
+
+        public static float PolygonToCircle(Polygon poly, Circle circ)
+        {
+            Vector2 axisProj;
+            float overlap = (float) double.PositiveInfinity;
+
+            float min1, max1, min2, max2;
+
+            for (var i = 0; i < poly.UpdatedPositions.Length; i++)
+            {
+                int b = (i + 1) % poly.UpdatedPositions.Length;
+                axisProj = new Vector2(-(poly.UpdatedPositions[b].Y - poly.UpdatedPositions[i].Y), poly.UpdatedPositions[b].X - poly.UpdatedPositions[i].X);
+                float dist = (float) Math.Sqrt(axisProj.X * axisProj.X + axisProj.Y * axisProj.Y);
+                axisProj = new Vector2(axisProj.X / dist, axisProj.Y / dist);
+
+                min1 = (float) double.PositiveInfinity;
+                max1 = (float) double.NegativeInfinity;
+
+                for (var j = 0; j < poly.UpdatedPositions.Length; j++)
+                {
+                    float dotProduct = (poly.UpdatedPositions[j].X * axisProj.X + poly.UpdatedPositions[j].Y * axisProj.Y);
+                    min1 = Math.Min(min1, dotProduct);
+                    max1 = Math.Max(max1, dotProduct);
+                }
+
+                min2 = (float) double.PositiveInfinity;
+                max2 = (float) double.NegativeInfinity;
+
+                for (var j = 0; j < 2; j++)
+                {
+                    float dotProduct;
+                    if (j == 1)
+                    {
+                        dotProduct = ((circ.pos - (axisProj * circ.radius)).X * axisProj.X + (circ.pos - (axisProj * circ.radius)).Y * axisProj.Y);
+                    }else
+                    {
+                        dotProduct = ((circ.pos + (axisProj * circ.radius)).X * axisProj.X + (circ.pos + (axisProj * circ.radius)).Y * axisProj.Y);
+                    }
+
+                    min2 = Math.Min(min2, dotProduct);
+                    max2 = Math.Max(max2, dotProduct);
+                }
+
+                if (!(max2 >= min1 && min1 <= max2))
+                {
+                    return -1;
+                }
+
+                overlap = (float) Math.Min(Math.Min(max1, max2) - Math.Max(min1, min2), overlap);
+            }
+
+            int cpIndex = Collision.FindClosestPointOnPolygon(circ, poly);
+
+            axisProj = poly.UpdatedPositions[cpIndex] - circ.pos;
+            float temp = (float)Math.Sqrt(axisProj.X * axisProj.X + axisProj.Y * axisProj.Y);
+            axisProj /= temp;
+
+            min1 = (float) double.PositiveInfinity;
+            max1 = (float) double.NegativeInfinity;
+
+            for (var j = 0; j < poly.UpdatedPositions.Length; j++)
+            {
+                float dotProduct = (poly.UpdatedPositions[j].X * axisProj.X + poly.UpdatedPositions[j].Y * axisProj.Y);
+                min1 = Math.Min(min1, dotProduct);
+                max1 = Math.Max(max1, dotProduct);
+            }
+
+            min2 = (float) double.PositiveInfinity;
+            max2 = (float) double.NegativeInfinity;
+
+            for (var j = 0; j < 2; j++)
+            {
+                float dotProduct;
+                if (j == 1)
+                {
+                    dotProduct = ((circ.pos - (axisProj * circ.radius)).X * axisProj.X + (circ.pos - (axisProj * circ.radius)).Y * axisProj.Y);
+                }else
+                {
+                    dotProduct = ((circ.pos + (axisProj * circ.radius)).X * axisProj.X + (circ.pos + (axisProj * circ.radius)).Y * axisProj.Y);
+                }
+
+                min2 = Math.Min(min2, dotProduct);
+                max2 = Math.Max(max2, dotProduct);
+            }
+
+            if (!(max2 >= min1 && min1 <= max2))
+            {
+                return -1;
+            }
+
+            overlap = (float) Math.Min(Math.Min(max1, max2) - Math.Max(min1, min2), overlap);
+
+            return overlap;
+        }
+
+        private static int FindClosestPointOnPolygon(Circle circ, Polygon poly)
+        {
+            int result = -1;
+            float minDistance = (float) double.PositiveInfinity;
+
+            for (var i = 0; i < poly.UpdatedPositions.Length; i++)
+            {
+                Vector2 temp = circ.pos - poly.UpdatedPositions[i];
+                float sqMag = temp.X * temp.X + temp.Y * temp.Y;
+
+                if (sqMag < minDistance)
+                {
+                    minDistance = sqMag;
+                    result = i;
+                }
+            }
+
+            return result;
+        }
+
         public static float RadToDeg(float rad)
         {
             return rad * 180 / 3.142f;

@@ -27,17 +27,27 @@ namespace Radius2D
             var line04 = new Line(0, Height, Width, Height);
             Layer.lines.Add(line04);
 
-            // Adding AABB's to Physics Layer
-            for (var i = 0; i < 30; i++)
-            {
-                var newBox = new AABB(Raylib.GetRandomValue(10, 1000), Raylib.GetRandomValue(10, 250), Raylib.GetRandomValue(25, 75), Raylib.GetRandomValue(25, 75), Raylib.GetRandomValue(1, 15), Color.BROWN);
-                Layer.boxes.Add(newBox);
-            }
-
+            // Adding Circles to the Physics Layer
             for (var i = 0; i < 5; i++)
             {
                 var newCirc = new Circle(Raylib.GetRandomValue(10, 1000), Raylib.GetRandomValue(10, 250), 0, 0, Raylib.GetRandomValue(15, 35), Raylib.GetRandomValue(5, 15), 0.5f, Color.BROWN);
                 Layer.circles.Add(newCirc);
+            }
+
+            // Adding Polygons to the Physics Layer
+            for (var i = 0; i < 50; i++)
+            {
+                bool playerFlag;
+                if (Raylib.GetRandomValue(0, 1) == 0)
+                {
+                    playerFlag = false;
+                }else
+                {
+                    playerFlag = true;
+                }
+                var box = new Polygon(Raylib.GetRandomValue(30, 1020), Raylib.GetRandomValue(30, 920), Raylib.GetRandomValue(3, 8), Raylib.GetRandomValue(12, 30), 1.0f, playerFlag);
+                box.angle = Raylib.GetRandomValue(-10, 10);
+                Layer.polygons.Add(box);
             }
 
             // Some Extra Variables
