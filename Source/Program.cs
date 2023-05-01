@@ -27,20 +27,14 @@ namespace Radius2D
             var line04 = new Line(0, Height, Width, Height);
             Layer.lines.Add(line04);
 
-            // Adding AABB's to Physics Layer
-            for (var i = 0; i < 30; i++)
-            {
-                var newBox = new AABB(Raylib.GetRandomValue(10, 1000), Raylib.GetRandomValue(10, 250), Raylib.GetRandomValue(25, 75), Raylib.GetRandomValue(25, 75), Raylib.GetRandomValue(1, 15), Color.BROWN);
-                Layer.boxes.Add(newBox);
-            }
-
+            // Adding Circles to the Physics Layer
             for (var i = 0; i < 5; i++)
             {
                 var newCirc = new Circle(Raylib.GetRandomValue(10, 1000), Raylib.GetRandomValue(10, 250), 0, 0, Raylib.GetRandomValue(15, 35), Raylib.GetRandomValue(5, 15), 0.5f, Color.BROWN);
                 Layer.circles.Add(newCirc);
             }
 
-            List<Polygon> polygones = new List<Polygon>(0);
+            // Adding Polygons to the Physics Layer
             for (var i = 0; i < 50; i++)
             {
                 bool playerFlag;
@@ -51,9 +45,9 @@ namespace Radius2D
                 {
                     playerFlag = true;
                 }
-                var box = new Polygon(Raylib.GetRandomValue(30, 1020), Raylib.GetRandomValue(30, 920), Raylib.GetRandomValue(3, 8), Raylib.GetRandomValue(12, 30), playerFlag);
+                var box = new Polygon(Raylib.GetRandomValue(30, 1020), Raylib.GetRandomValue(30, 920), Raylib.GetRandomValue(3, 8), Raylib.GetRandomValue(12, 30), 1.0f, playerFlag);
                 box.angle = Raylib.GetRandomValue(-10, 10);
-                polygones.Add(box);
+                Layer.polygons.Add(box);
             }
 
             // Some Extra Variables
@@ -71,22 +65,7 @@ namespace Radius2D
                 deltaTime = Raylib.GetFrameTime();
 
                 // Updating the Physics Layer
-                //Layer.Update(deltaTime);
-
-                foreach (var box in polygones)
-                {
-                    box.Update(deltaTime);
-                    foreach (var boxe in polygones)
-                    {
-                        if (box != boxe && Collision.PolygonToPolygon(box, boxe) > 0.0f)
-                        {
-                            box.overlap = true;
-                            box.overlap = true;
-                        }
-
-                        box.CollisionResponsePolygon(boxe, deltaTime);
-                    }
-                }
+                Layer.Update(deltaTime);
                 
                 // Rendering Section of the Program
                 Raylib.BeginDrawing();
@@ -97,18 +76,7 @@ namespace Radius2D
                     Raylib.DrawText(fpsText, 20, 20, 20, Color.RAYWHITE);
 
                     // Drawing the Physics Layer's every Element
-                    //Layer.Draw();
-
-                    foreach (var box in polygones)
-                    {
-                        if (!box.overlap)
-                        {
-                            box.Draw(Color.WHITE);
-                        }else
-                        {
-                            box.Draw(Color.RED);
-                        }
-                    }
+                    Layer.Draw();
                 
                 // End of Rendering section
                 Raylib.EndDrawing();
