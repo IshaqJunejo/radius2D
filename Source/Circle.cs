@@ -92,8 +92,8 @@ namespace Radius2D
                     Vector2 pentrateResolve = normal * depth / 2;
 
                     // Executing Penetration
-                    this.pos += pentrateResolve;
-                    circ.pos -= pentrateResolve;
+                    this.pos += pentrateResolve * this.inverseMass / (this.inverseMass + circ.inverseMass);
+                    circ.pos -= pentrateResolve * circ.inverseMass / (this.inverseMass + circ.inverseMass);
 
                     // Calculating Repulsion
                     float productOfElasticity = this.elasticity * circ.elasticity;

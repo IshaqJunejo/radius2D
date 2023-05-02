@@ -104,8 +104,8 @@ namespace Radius2D
                     float magnitude = (float)Math.Sqrt(d.X * d.X + d.Y * d.Y);
                     Vector2 normal = d / magnitude;
 
-                    this.centrePos -= Collision.PolygonToPolygon(this, poly) * normal / 2 * deltaTime * 60;
-                    poly.centrePos += Collision.PolygonToPolygon(this, poly) * normal / 2 * deltaTime * 60;
+                    this.centrePos -= Collision.PolygonToPolygon(this, poly) * normal / 2 * deltaTime * 60 * this.inverseMass / (this.inverseMass + poly.inverseMass);
+                    poly.centrePos += Collision.PolygonToPolygon(this, poly) * normal / 2 * deltaTime * 60 * poly.inverseMass / (this.inverseMass + poly.inverseMass);
 
                     // Calculating Repulsion
                     float productOfElasticity = this.elasticity * poly.elasticity;
@@ -134,8 +134,8 @@ namespace Radius2D
                 float magnitude = (float)Math.Sqrt(d.X * d.X + d.Y * d.Y);
                 Vector2 normal = d / magnitude;
 
-                this.centrePos -= Collision.PolygonToCircle(this, circ) * d / magnitude / 2 * deltaTime * 60;
-                circ.pos += Collision.PolygonToCircle(this, circ) * d / magnitude / 2 * deltaTime * 60;
+                this.centrePos -= Collision.PolygonToCircle(this, circ) * normal / 2 * deltaTime * 60 * this.inverseMass / (this.inverseMass + circ.inverseMass);
+                circ.pos += Collision.PolygonToCircle(this, circ) * normal / 2 * deltaTime * 60 * circ.inverseMass / (this.inverseMass + circ.inverseMass);
 
                 // Calculating Repulsion
                 float productOfElasticity = this.elasticity * circ.elasticity;
