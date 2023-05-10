@@ -118,12 +118,12 @@ namespace Radius2D
         public void CollisionResponseLine(Line l, float deltaTime)
         {
             // Checking for Collision activity
-            if (Collision.CircleToLine(l, this) < this.radius)
+            if (Collision.PolygonToCircle(l, this) < this.radius)
             {
                 // Calculating that Circle is lying on line's which side
-                double ang01 = Math.Atan2(l.p.Y - this.pos.Y, l.p.X - this.pos.X);
+                /*double ang01 = Math.Atan2(l.UpdatedPositions[0].Y - this.pos.Y, l.UpdatedPositions[0].X - this.pos.X);
 
-                float depth = this.radius - Collision.CircleToLine(l, this);
+                float depth = this.radius - Collision.PolygonToCircle(l, this);
 
                 if (ang01 - l.angle > 0)
                 {
@@ -143,7 +143,7 @@ namespace Radius2D
                 }else
                 {
                     Console.Write("...");
-                }
+                }*/
             }
         }
 

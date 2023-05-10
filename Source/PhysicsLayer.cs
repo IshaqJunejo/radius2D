@@ -37,7 +37,7 @@ namespace Radius2D
                 }
                 foreach (Line line in this.lines)
                 {
-                    circle.CollisionResponseLine(line, deltaTime);
+                    //circle.CollisionResponseLine(line, deltaTime);
                 }
             }
 
@@ -71,6 +71,10 @@ namespace Radius2D
                 foreach (var circ in this.circles)
                 {
                     box.CollisionResponseCircle(circ, deltaTime);
+                }
+                foreach (var line in this.lines)
+                {
+                    box.CollisionResponsePolygon(line, deltaTime);
                 }
             }
 

@@ -82,10 +82,10 @@ namespace Radius2D
         // Method to calculate Collision between Bounding Box and Line
         public static bool AABBToLine(AABB box, Line wall)
         {
-            float left = Math.Max(box.pos.X, Math.Min(wall.p.X, wall.q.X));
-            float right = Math.Min(box.pos.X, Math.Max(wall.p.X, wall.q.X));
-            float top = Math.Max(box.pos.Y, Math.Min(wall.p.Y, wall.q.Y));
-            float bottom = Math.Min(box.pos.Y, Math.Max(wall.p.Y, wall.q.Y));
+            float left = Math.Max(box.pos.X, Math.Min(wall.UpdatedPositions[0].X, wall.UpdatedPositions[1].X));
+            float right = Math.Min(box.pos.X, Math.Max(wall.UpdatedPositions[0].X, wall.UpdatedPositions[1].X));
+            float top = Math.Max(box.pos.Y, Math.Min(wall.UpdatedPositions[0].Y, wall.UpdatedPositions[1].Y));
+            float bottom = Math.Min(box.pos.Y, Math.Max(wall.UpdatedPositions[0].Y, wall.UpdatedPositions[1].Y));
 
             if (left > right || top > bottom)
             {
@@ -104,17 +104,17 @@ namespace Radius2D
         // Method to calculate Collision between Ball/Circle and Line
         public static float CircleToLine(Line l, Circle circ)
         {
-            Vector2 v1 = (l.p - l.q) / l.length;
-            Vector2 v2 = (l.q - l.p) / l.length;
+            Vector2 v1 = (l.UpdatedPositions[0] - l.UpdatedPositions[1]) / l.length;
+            Vector2 v2 = (l.UpdatedPositions[1] - l.UpdatedPositions[0]) / l.length;
 
-            Vector2 v3 = circ.pos - l.p;
-            Vector2 v4 = circ.pos - l.q;
+            Vector2 v3 = circ.pos - l.UpdatedPositions[0];
+            Vector2 v4 = circ.pos - l.UpdatedPositions[1];
 
             if (Vector2.Dot(v2, v3) > 0 && Vector2.Dot(v1, v4) > 0)
             {
-                Vector2 dist = l.p - l.q;
+                Vector2 dist = l.UpdatedPositions[0] - l.UpdatedPositions[1];
                 float Base = (float) Math.Sqrt(dist.X * dist.X + dist.Y * dist.Y);
-                float height = TriangleArea(l.p, l.q, circ.pos) * 2 / Base;
+                float height = TriangleArea(l.UpdatedPositions[0], l.UpdatedPositions[1], circ.pos) * 2 / Base;
                 return height;
             }else
             {

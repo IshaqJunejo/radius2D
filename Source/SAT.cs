@@ -9,7 +9,6 @@ namespace Radius2D
         public Vector2 centrePos;
         public float angle;
         public Vector2[] UpdatedPositions;
-        private bool player;
         public Vector2 vel;
         public Vector2 force;
         public float mass;
@@ -17,7 +16,7 @@ namespace Radius2D
         public float elasticity;
 
         // Constructor
-        public Polygon(float centerX, float centerY, int NumOfVertices, float radie, float mass, bool isItPlayer)
+        public Polygon(float centerX, float centerY, int NumOfVertices, float radie, float mass, float angle)
         {
             this.centrePos = new Vector2(centerX, centerY);
 
@@ -46,8 +45,6 @@ namespace Radius2D
                 this.inverseMass = 1 / mass;
             }
 
-            // Player Flag
-            this.player = isItPlayer;
             this.elasticity = 0.8f;
         }
 

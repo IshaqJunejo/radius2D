@@ -18,34 +18,34 @@ namespace Radius2D
             var Layer = new PhysicsLayer();
 
             // Adding Lines in the Physics Layer
-            var line01 = new Line(Width, 1, 0, 1);
+            Line line01;
+            line01 = Line.makeLine(Width, 1, 0, 1);
             Layer.lines.Add(line01);
-            var line02 = new Line(1, 0, 1, Height);
+
+            Line line02;
+            line02 = Line.makeLine(1, 0, 1, Height);
             Layer.lines.Add(line02);
-            var line03 = new Line(Width, 0, Width, Height);
+
+            Line line03;
+            line03 = Line.makeLine(Width, 0, Width, Height);
             Layer.lines.Add(line03);
-            var line04 = new Line(0, Height, Width, Height);
+
+            Line line04;
+            line04 = Line.makeLine(0, Height, Width, Height);
             Layer.lines.Add(line04);
 
             // Adding Circles to the Physics Layer
             for (var i = 0; i < 5; i++)
             {
-                var newCirc = new Circle(Raylib.GetRandomValue(10, 1000), Raylib.GetRandomValue(10, 250), 0, 0, Raylib.GetRandomValue(15, 35), Raylib.GetRandomValue(5, 15), 0.5f, Color.BROWN);
+                var newCirc = new Circle(Raylib.GetRandomValue(10, 1000), Raylib.GetRandomValue(30, 950), 0, 0, Raylib.GetRandomValue(15, 35), Raylib.GetRandomValue(5, 15), 0.5f, Color.BROWN);
+                //var newCirc = new Circle(Raylib.GetRandomValue(30, 1020), Raylib.GetRandomValue(30, 950), 0, 0, Raylib.GetRandomValue(15, 35), 0.0f, 0.5f, Color.BROWN);
                 Layer.circles.Add(newCirc);
             }
 
             // Adding Polygons to the Physics Layer
             for (var i = 0; i < 50; i++)
             {
-                bool playerFlag;
-                if (Raylib.GetRandomValue(0, 1) == 0)
-                {
-                    playerFlag = false;
-                }else
-                {
-                    playerFlag = true;
-                }
-                var box = new Polygon(Raylib.GetRandomValue(30, 1020), Raylib.GetRandomValue(30, 920), Raylib.GetRandomValue(3, 8), Raylib.GetRandomValue(12, 30), 1.0f, playerFlag);
+                var box = new Polygon(Raylib.GetRandomValue(30, 1020), Raylib.GetRandomValue(30, 920), Raylib.GetRandomValue(3, 8), Raylib.GetRandomValue(12, 30), 1.0f, 0.0f);
                 box.angle = Raylib.GetRandomValue(-10, 10);
                 Layer.polygons.Add(box);
             }
@@ -63,6 +63,8 @@ namespace Radius2D
                 FPS = Raylib.GetFPS();
                 fpsText = Convert.ToString(FPS);
                 deltaTime = Raylib.GetFrameTime();
+                
+                //Console.WriteLine(Layer.circles[0].vel);
 
                 // Updating the Physics Layer
                 Layer.Update(deltaTime);
