@@ -27,12 +27,16 @@ namespace Radius2D
             Layer.lines.Add(line02);
 
             Line line03;
-            line03 = Line.makeLine(Width, 0, Width, Height);
+            line03 = Line.makeLine(Width, Height, Width, 0);
             Layer.lines.Add(line03);
 
             Line line04;
             line04 = Line.makeLine(0, Height, Width, Height);
             Layer.lines.Add(line04);
+
+            Line line05;
+            line05 = Line.makeLine(120, 230, 1000, 750);
+            Layer.lines.Add(line05);
 
             // Adding Circles to the Physics Layer
             for (var i = 0; i < 5; i++)
@@ -49,6 +53,11 @@ namespace Radius2D
                 box.angle = Raylib.GetRandomValue(-10, 10);
                 Layer.polygons.Add(box);
             }
+
+            /*foreach (var line in Layer.lines)
+            {
+                line.Update(1 / 12);
+            }*/
 
             // Some Extra Variables
             float FPS;
@@ -68,6 +77,11 @@ namespace Radius2D
 
                 // Updating the Physics Layer
                 Layer.Update(deltaTime);
+
+                foreach (var line in Layer.lines)
+                {
+                    line.Update(deltaTime);
+                }
                 
                 // Rendering Section of the Program
                 Raylib.BeginDrawing();

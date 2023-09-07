@@ -14,19 +14,27 @@ namespace Radius2D
             this.centrePos = new Vector2(centerX, centerY);
 
             // Setting Up Reference Positions
-            this.ReferencePositions = new Vector2[NumOfVertices];
+            this.ReferencePositions = new Vector2[4];
             for (var i = 0; i < NumOfVertices; i++)
             {
-                this.ReferencePositions[i] = new Vector2((float)Math.Cos(2 * Math.PI / NumOfVertices * i) * radie, (float)Math.Sin(2 * Math.PI / NumOfVertices * i) * radie);
+                this.ReferencePositions[i] = new Vector2((float)Math.Cos(Math.PI * i) * radie, (float)Math.Sin(Math.PI * i) * radie);
             }
+
+            this.ReferencePositions[0] = new Vector2(this.ReferencePositions[0].X - (float)Math.Cos(Math.PI / 2), this.ReferencePositions[0].Y - (float)Math.Sin(Math.PI / 2));
+            this.ReferencePositions[1] = new Vector2(this.ReferencePositions[1].X - (float)Math.Cos(Math.PI / 2), this.ReferencePositions[1].Y - (float)Math.Sin(Math.PI / 2));
+
+            this.ReferencePositions[2] = new Vector2(this.ReferencePositions[1].X + (float)Math.Cos(Math.PI / 2), this.ReferencePositions[1].Y + (float)Math.Sin(Math.PI / 2));
+            this.ReferencePositions[3] = new Vector2(this.ReferencePositions[0].X + (float)Math.Cos(Math.PI / 2), this.ReferencePositions[0].Y + (float)Math.Sin(Math.PI / 2));
+
             // Angle
-            this.angle = (float) (Math.PI / -2.0);
+            this.angle = angle;
 
             // Setting Up Updated Positions
-            this.UpdatedPositions = new Vector2[NumOfVertices];
-            for (var i = 0; i < NumOfVertices; i++)
+            this.UpdatedPositions = new Vector2[4];
+            for (var i = 0; i < 4; i++)
             {
                 this.UpdatedPositions[i] = new Vector2(centrePos.X + ReferencePositions[i].X, centrePos.Y + ReferencePositions[i].Y);
+                //Console.WriteLine(this.UpdatedPositions[i]);
             }
 
             this.mass = mass;
@@ -59,7 +67,7 @@ namespace Radius2D
         public static Line makeLine(float posX1, float posY1, float posX2, float posY2)
         {
             float angle = (float) Math.Atan2(posY1 - posY2, posX1 - posX2);
-            float distance = (float) Math.Sqrt(((posX1 - posX2) * (posX1 - posX2)) + ((posY1 - posY2) * (posY1 * posY2)));
+            float distance = (float) Math.Sqrt(((posX1 - posX2) * (posX1 - posX2)) + ((posY1 - posY2) * (posY1 - posY2)));
             var newLine = new Line((posX1 + posX2) / 2, (posY1 + posY2) / 2, 2, distance / 2, 0, angle);
 
             return newLine;

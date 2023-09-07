@@ -38,6 +38,7 @@ namespace Radius2D
                 foreach (Line line in this.lines)
                 {
                     //circle.CollisionResponseLine(line, deltaTime);
+                    line.CollisionResponseCircle(circle, deltaTime);
                 }
             }
 
